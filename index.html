@@ -1,0 +1,139 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Community Health Clinic</title>
+<style>
+/* --- GLOBAL STYLES --- */
+body {margin:0; font-family: Arial, sans-serif; background-color:#fff; color:#333;}
+a {text-decoration:none; color:#ff0000;}
+button {padding:10px 20px; margin:5px; background-color:#ff0000; color:#fff; border:none; border-radius:5px; cursor:pointer;}
+header {display:flex; justify-content:space-between; align-items:center; padding:15px; background-color:#fff; position:sticky; top:0; z-index:1000;}
+header h1 {color:red; font-size:1.5rem;}
+header .cross {color:yellow; font-weight:bold; font-size:1.5rem; margin-left:5px;}
+section {padding:20px;}
+.hero {text-align:center; margin-top:50px;}
+.hero h2 {font-size:2rem;}
+.services {display:flex; flex-wrap:wrap; gap:15px; justify-content:center;}
+.service {flex:1 1 45%; border:1px solid #ddd; border-radius:10px; padding:10px; text-align:center; min-width:150px;}
+.token-form, .feedback-form {max-width:400px; margin:auto; display:flex; flex-direction:column; gap:10px;}
+input, select {padding:10px; border-radius:5px; border:1px solid #ccc; width:100%;}
+.dashboard {max-width:600px; margin:auto; border:1px solid #ddd; border-radius:10px; padding:10px; display:none; flex-direction:column; gap:5px; background:#f9f9f9;}
+.map iframe {width:100%; height:300px; border:0; border-radius:10px;}
+.welcome-overlay {position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.8); display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:2000;}
+.welcome-overlay h1 {font-size:3rem; color:red;}
+.welcome-overlay p {font-size:1.2rem; margin-top:10px;}
+@media(max-width:600px){.hero h2{font-size:1.5rem;}} 
+</style>
+</head>
+<body><!-- Welcome Overlay --><div class="welcome-overlay" id="welcomeOverlay">
+  <h1>WELCOME</h1>
+  <p id="welcomeQuote">Where care is given, hope is born.</p>
+</div><!-- Header --><header>
+  <div>
+    <h1>COMMUNITY HEALTH CLINIC <span class="cross">+</span></h1>
+    <small>Since 2003</small>
+  </div>
+  <a href="tel:9961252798">Call Now</a>
+</header><!-- Hero Section --><section class="hero">
+  <h2>Take Your Token</h2>
+  <p>Tokens can only be taken for the next day. Closes at 10 PM the day before OP.</p>
+</section><!-- Services --><section class="services">
+  <div class="service">General OP <br> 🏥</div>
+  <div class="service">Nebulisation <br> 💨</div>
+  <div class="service">ECG <br> ❤️</div>
+  <div class="service">Ear Irrigation <br> 👂</div>
+  <div class="service">IV Fluids <br> 💧</div>
+  <div class="service">TT Injection <br> 💉</div>
+  <div class="service">Oxygen Support <br> 🫁</div>
+  <div class="service">Minor Wound Care <br> 🩹</div>
+  <div class="service">BP/Diabetes Monitoring <br> 🩺</div>
+  <div class="service">Home Call on Request <br> 🏠</div>
+  <div class="service">First Aid / Emergency <br> 🚑</div>
+</section><!-- Token Form --><section>
+  <h2>Token Form</h2>
+  <form class="token-form" id="tokenForm">
+    <input type="text" id="patientName" placeholder="Name" required>
+    <input type="number" id="patientAge" placeholder="Age" required>
+    <select id="patientSex" required>
+      <option value="">Select Sex</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+      <option value="Other">Other</option>
+    </select>
+    <input type="tel" id="patientMobile" placeholder="Mobile Number" required>
+    <button type="submit">Get Token</button>
+  </form>
+  <p id="tokenNumberDisplay"></p>
+</section><!-- Dashboard --><section>
+  <h2>Authorized Dashboard</h2>
+  <input type="password" id="dashboardPin" placeholder="Enter PIN">
+  <button onclick="showDashboard()">Enter</button>
+  <div class="dashboard" id="dashboardArea"></div>
+</section><!-- Working Hours --><section>
+  <h2>Working Hours</h2>
+  <p>Mon-Sat: 9 AM - 11 PM</p>
+  <p>Sun: 9 AM - 8 PM</p>
+  <p>Call to confirm doctor availability.</p>
+</section><!-- Contact / Map --><section class="map">
+  <h2>Contact & Location</h2>
+  <a href="tel:9961252798">Call: 9961252798</a>
+  <!-- Insert your Google Map iframe here -->
+</section><!-- Feedback --><section>
+  <h2>Feedback</h2>
+  <form class="feedback-form">
+    <input type="text" placeholder="Name (optional)">
+    <input type="number" placeholder="Rating (1-5)" min="1" max="5">
+    <input type="text" placeholder="Comment">
+    <button type="submit">Submit</button>
+  </form>
+</section><script>
+// --- Welcome Overlay ---
+setTimeout(()=>{document.getElementById('welcomeOverlay').style.display='none';},2000);
+
+// --- Simple Token System ---
+let tokenCounter = 0;
+let tokens = [];
+const form = document.getElementById('tokenForm');
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+  tokenCounter++;
+  const patient = {
+    name: document.getElementById('patientName').value,
+    age: document.getElementById('patientAge').value,
+    sex: document.getElementById('patientSex').value,
+    mobile: document.getElementById('patientMobile').value,
+    token: tokenCounter
+  };
+  tokens.push(patient);
+  document.getElementById('tokenNumberDisplay').innerText = `Your token number is: ${tokenCounter}`;
+  form.reset();
+  console.log('Token added:', patient);
+});
+
+// --- Simple Dashboard ---
+function showDashboard(){
+  const pin = document.getElementById('dashboardPin').value;
+  const correctPin = '1234'; // Change PIN here
+  if(pin === correctPin){
+    const dashboard = document.getElementById('dashboardArea');
+    dashboard.style.display='flex';
+    dashboard.innerHTML = '';
+    tokens.forEach(t => {
+      const div = document.createElement('div');
+      div.innerText = `Token: ${t.token} | Name: ${t.name} | Age: ${t.age} | Sex: ${t.sex}`;
+      dashboard.appendChild(div);
+    });
+  }else{
+    alert('Incorrect PIN');
+  }
+}
+
+// --- Token List Email / Export (example using console log) ---
+// You can implement Google Script / email sending for free
+function sendTokenList(){
+  console.log('Sending token list:', tokens);
+}
+// Example: schedule sendTokenList() at 10 PM daily using server-side or cron job
+</script></body>
+</html>
