@@ -3,47 +3,58 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Community Health Clinic</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
-body {margin:0; font-family: Arial, sans-serif; background-color:#fff; color:#333;}
-a {text-decoration:none; color:#ff0000;}
-button {padding:10px 20px; margin:5px; background-color:#ff0000; color:#fff; border:none; border-radius:5px; cursor:pointer;}
-header {display:flex; flex-direction:column; justify-content:center; align-items:center; padding:15px; position:fixed; top:0; width:100%; background:rgba(255,255,255,1); transition: background 0.3s; z-index:1000;}
-body.scrolled header {background:rgba(255,255,255,0.7);}
-header h1 {color:red; font-size:1.5rem;}
-header .cross {color:yellow; font-weight:bold; font-size:1.5rem; margin-left:5px;}
+body {margin:0; font-family: Arial, sans-serif; background-color:#fdfdfd; color:#333;}
+header {display:flex; flex-direction:column; justify-content:center; align-items:center; padding:15px; position:fixed; top:0; width:100%; background:rgba(255,255,255,1); transition: background 0.3s; z-index:1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
+body.scrolled header {background:rgba(255,255,255,0.8);}
+header h1 {color:red; font-size:1.8rem; display:flex; align-items:center;}
+header .cross {color:yellow; font-weight:bold; font-size:1.8rem; margin-left:5px;}
 header small {display:block; font-size:0.9rem;}
-section {padding:20px; margin-top:120px;}
-.hero {text-align:center; margin-top:20px;}
-.hero h2 {font-size:2rem; margin-bottom:10px;}
-.services h2{text-align:center; margin-bottom:20px;}
+section {padding:100px 20px 40px;}
 .services {display:flex; flex-wrap:wrap; gap:15px; justify-content:center; margin-top:10px;}
-.service {flex:1 1 45%; border:1px solid #ddd; border-radius:10px; padding:20px; text-align:center; min-width:150px; display:block;}
-.token-form, .feedback-form {max-width:400px; margin:auto; display:flex; flex-direction:column; gap:10px;}
-input, select {padding:10px; border-radius:5px; border:1px solid #ccc; width:100%;}
+.service {flex:1 1 30%; border:1px solid #ddd; border-radius:10px; padding:20px; text-align:center; min-width:120px; background:#fff; box-shadow:0 2px 6px rgba(0,0,0,0.05);}
+.token-section {padding:40px 20px; background:#f0f8ff; border-radius:10px; margin-top:20px;}
+.token-display {margin-top:20px;}
+.token-box {font-size:2rem; font-weight:bold; color:#ff0000; text-align:center; border:2px dashed #ff0000; border-radius:10px; padding:20px; position:relative; display:inline-block;}
+.token-box::after {content:''; position:absolute; top:-5px; left:-5px; width:10px; height:10px; background:#ff0; border-radius:50%; animation: floatRibbon 2s infinite alternate;}
+@keyframes floatRibbon {0%{transform:translate(0,0)}100%{transform:translate(5px,-5px)}}
 .dashboard {max-width:600px; margin:auto; border:1px solid #ddd; border-radius:10px; padding:10px; display:none; flex-direction:column; gap:5px; background:#f9f9f9;}
-.map iframe {width:100%; height:300px; border:0; border-radius:10px;}
-.welcome-overlay {position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.8); display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:2000;}
+.welcome-overlay {position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:2000;}
 .welcome-overlay h1 {font-size:3rem; color:red;}
 .welcome-overlay p {font-size:1.2rem; margin-top:10px;}
-.ribbon {position:relative; display:inline-block;}
-.ribbon::after {content:''; position:absolute; top:-5px; left:-5px; width:10px; height:10px; background:red; border-radius:50%; animation: floatRibbon 2s infinite alternate;}
-@keyframes floatRibbon {0%{transform:translate(0,0)}100%{transform:translate(5px,-5px)}}
 .star {font-size:2rem; color:#ccc; cursor:pointer;}
 .star.checked {color:gold;}
-@media(max-width:600px){.hero h2{font-size:1.5rem;}} 
 </style>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
-<body><!-- Welcome Overlay --><div class="welcome-overlay" id="welcomeOverlay">
+<body><div class="welcome-overlay" id="welcomeOverlay">
   <h1>WELCOME</h1>
   <p id="welcomeQuote">“Health is wealth.”</p>
-</div><!-- Header --><header>
-  <h1>COMMUNITY HEALTH CLINIC <span class="cross">+</span></h1>
+</div><header>
   <small>Since 2003</small>
+  <h1>COMMUNITY HEALTH CLINIC <span class="cross">+</span></h1>
   <small>Cheenimukku, Poonoor</small>
   <small>Dr P K MUHAMMED ALI (Chief Physician)</small>
-</header><!-- Token Section --><section class="hero">
-  <h2>Take Your Token</h2>
-  <p>Tokens can only be taken for the next day. Closes at 10 PM the day before OP.</p>
+</header><section>
+  <h2 class="text-center">Our Services</h2>
+  <div class="services">
+    <div class="service">General OP 🏥</div>
+    <div class="service">Nebulisation 💨</div>
+    <div class="service">ECG ❤️</div>
+    <div class="service">Ear Irrigation 👂</div>
+    <div class="service">IV Fluids 💧</div>
+    <div class="service">TT Injection 💉</div>
+    <div class="service">Oxygen Support 🫁</div>
+    <div class="service">Minor Wound Care 🩹</div>
+    <div class="service">BP/Diabetes Monitoring 🩺</div>
+    <div class="service">Home Call on Request 🏠</div>
+    <div class="service">First Aid / Emergency 🚑</div>
+  </div>
+</section><section class="token-section">
+  <h2 class="text-center">Take Your Token</h2>
+  <p class="text-center">Tokens are only for the next day. Max one per patient (name, age, sex).</p>
   <form class="token-form" id="tokenForm">
     <input type="text" id="patientName" placeholder="Name" required>
     <input type="number" id="patientAge" placeholder="Age" required>
@@ -53,42 +64,27 @@ input, select {padding:10px; border-radius:5px; border:1px solid #ccc; width:100
       <option value="Female">Female</option>
       <option value="Other">Other</option>
     </select>
-    <input type="date" id="tokenDate" required>
+    <input type="tel" id="patientMobile" placeholder="Mobile Number" required>
     <button type="submit">Get Token</button>
   </form>
-  <p id="tokenNumberDisplay"></p>
-</section><!-- Services --><section>
-  <h2>Our Services</h2>
-  <div class="services">
-    <div class="service">General OP <br> 🏥</div>
-    <div class="service">Nebulisation <br> 💨</div>
-    <div class="service">ECG <br> ❤️</div>
-    <div class="service">Ear Irrigation <br> 👂</div>
-    <div class="service">IV Fluids <br> 💧</div>
-    <div class="service">TT Injection <br> 💉</div>
-    <div class="service">Oxygen Support <br> 🫁</div>
-    <div class="service">Minor Wound Care <br> 🩹</div>
-    <div class="service">BP/Diabetes Monitoring <br> 🩺</div>
-    <div class="service">Home Call on Request <br> 🏠</div>
-    <div class="service">First Aid / Emergency <br> 🚑</div>
-  </div>
-</section><!-- Dashboard --><section>
+  <div class="token-display" id="tokenDisplay"></div>
+</section><section>
   <h2>Authorized Dashboard</h2>
-  <input type="password" id="dashboardPin" placeholder="Enter PIN">
+  <input type="password" id="dashboardPin" placeholder="Enter View PIN or Master PIN">
   <button onclick="showDashboard()">Enter</button>
   <div class="dashboard" id="dashboardArea"></div>
-</section><!-- Working Hours --><section>
+</section><section>
   <h2>Working Hours</h2>
   <p>Mon-Sat: 9:00 AM - 11:00 PM</p>
   <p>Sun: 9:00 AM - 8:00 PM</p>
   <p>Call to confirm doctor availability.</p>
-</section><!-- Contact / Map --><section class="map">
+</section><section class="map">
   <h2>Contact & Location</h2>
   <p>Address: Cheenimukku, Poonoor</p>
-</section><!-- Feedback --><section>
+</section><section>
   <h2>Feedback</h2>
   <form class="feedback-form" id="feedbackForm">
-    <input type="text" placeholder="Name (optional)">
+    <input type="text" placeholder="Name (optional)" id="feedbackName">
     <div id="ratingStars">
       <span class="star" data-value="1">★</span>
       <span class="star" data-value="2">★</span>
@@ -96,78 +92,77 @@ input, select {padding:10px; border-radius:5px; border:1px solid #ccc; width:100
       <span class="star" data-value="4">★</span>
       <span class="star" data-value="5">★</span>
     </div>
-    <input type="text" placeholder="Comment">
+    <input type="text" placeholder="Comment" id="feedbackComment">
     <button type="submit">Submit</button>
   </form>
 </section><script>
-// Welcome Overlay
+// Firebase config (replace with your own project info)
+const firebaseConfig = {apiKey:"YOUR_API_KEY",authDomain:"YOUR_DOMAIN",databaseURL:"YOUR_DB_URL",projectId:"YOUR_PROJECT_ID"};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+// Welcome overlay
 setTimeout(()=>{document.getElementById('welcomeOverlay').style.display='none';},2000);
 
-// Header scroll translucent
+// Header scroll
 window.addEventListener('scroll', () => {
-  if(window.scrollY > 50){ document.body.classList.add('scrolled'); }
-  else { document.body.classList.remove('scrolled'); }
+  document.body.classList.toggle('scrolled', window.scrollY > 50);
 });
 
-// Token System
+// Token system
 let tokenCounter = 0;
-let tokens = [];
-const form = document.getElementById('tokenForm');
-form.addEventListener('submit', function(e){
+const tokenDisplay = document.getElementById('tokenDisplay');
+const tokenForm = document.getElementById('tokenForm');
+const nextDay = new Date(); nextDay.setDate(nextDay.getDate()+1);
+
+function displayTokenBox(patient){
+  tokenDisplay.innerHTML = `<div class="token-box">Token #${patient.token}<br>${nextDay.toDateString()}</div>`;
+}
+
+function fetchTokens(){
+  db.ref('tokens').once('value').then(snapshot => {
+    const data = snapshot.val() || {};
+    tokenCounter = Object.keys(data).length;
+  });
+}
+fetchTokens();
+
+tokenForm.addEventListener('submit', e => {
   e.preventDefault();
-  tokenCounter++;
-  const patient = {
-    name: document.getElementById('patientName').value,
-    age: document.getElementById('patientAge').value,
-    sex: document.getElementById('patientSex').value,
-    date: document.getElementById('tokenDate').value,
-    token: tokenCounter
-  };
-  tokens.push(patient);
-  document.getElementById('tokenNumberDisplay').innerHTML = `<div class="ribbon" style="font-size:3rem; font-weight:bold; color:#ff0000; text-align:center; border:2px dashed #ff0000; border-radius:10px; padding:20px; margin-top:10px;">Token #${tokenCounter}<br>Date: ${patient.date}</div>`;
-  form.reset();
+  const name = document.getElementById('patientName').value;
+  const age = document.getElementById('patientAge').value;
+  const sex = document.getElementById('patientSex').value;
+  const mobile = document.getElementById('patientMobile').value;
+
+  db.ref('tokens').orderByChild('unique').equalTo(`${name}_${age}_${sex}`).once('value', snap => {
+    if(snap.exists()){ alert('Token already exists for this patient'); return; }
+    tokenCounter++;
+    const patient = {name, age, sex, mobile, token: tokenCounter, date: nextDay.toDateString(), unique:`${name}_${age}_${sex}`};
+    db.ref('tokens/'+tokenCounter).set(patient);
+    displayTokenBox(patient);
+    tokenForm.reset();
+  });
 });
 
-// Dashboard dual pins with edit
-const viewPin = '1111';
-const masterPin = '9999';
-function showDashboard(){
-  const pin = document.getElementById('dashboardPin').value;
-  const dashboard = document.getElementById('dashboardArea');
-  dashboard.innerHTML='';
-  dashboard.style.display='flex';
-  if(pin === viewPin){
-    tokens.forEach(t => {
-      const div = document.createElement('div');
-      div.innerText = `Token: ${t.token} | Name: ${t.name} | Age: ${t.age} | Sex: ${t.sex} | Date: ${t.date}`;
-      dashboard.appendChild(div);
-    });
-  } else if(pin === masterPin){
-    tokens.forEach((t,i)=>{
-      const div = document.createElement('div');
-      div.innerHTML = `Token: ${t.token} | Name: ${t.name} | Age: ${t.age} | Sex: ${t.sex} | Date: ${t.date} <button onclick="editToken(${i})">Edit</button> <button onclick="eraseToken(${i})">Erase</button>`;
-      dashboard.appendChild(div);
-    });
-  } else {
-    alert('Incorrect PIN');
-  }
-}
-function editToken(i){
-  const newName = prompt('Enter new name', tokens[i].name);
-  if(newName) tokens[i].name = newName;
-  showDashboard();
-}
-function eraseToken(i){
-  if(confirm('Erase this token?')){ tokens.splice(i,1); showDashboard(); }
-}
-
-// Rating stars
+// Feedback submission
 const stars = document.querySelectorAll('.star');
-stars.forEach(star => {
-  star.addEventListener('click',()=>{
-    stars.forEach(s => s.classList.remove('checked'));
-    for(let i=0;i<star.dataset.value;i++){ stars[i].classList.add('checked');}
-  });
+let selectedRating = 0;
+stars.forEach(star => star.addEventListener('click',()=>{
+  selectedRating = star.dataset.value;
+  stars.forEach(s=>s.classList.remove('checked'));
+  for(let i=0;i<star.dataset.value;i++){stars[i].classList.add('checked');}
+}));
+
+document.getElementById('feedbackForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  const name = document.getElementById('feedbackName').value || 'Anonymous';
+  const comment = document.getElementById('feedbackComment').value;
+  const feedbackData = {name, comment, rating:selectedRating, date:new Date().toLocaleString()};
+  db.ref('feedbacks').push(feedbackData);
+  alert('Feedback submitted');
+  document.getElementById('feedbackForm').reset();
+  stars.forEach(s=>s.classList.remove('checked'));
+  selectedRating = 0;
 });
 </script></body>
 </html>
