@@ -43,7 +43,13 @@ header.scrolled{background:rgba(255,255,255,.7);backdrop-filter:blur(10px)}
 .dark-mode header{background:#1e1e1e}
 .since{font-size:12px;color:#777}.clinic-name{font-size:22px;font-weight:700}.plus{color:#facc15;font-weight:900}.address{font-size:13px;color:#666}
 section{padding:20px 16px}.section-title{font-size:20px;font-weight:600;margin-bottom:14px;text-align:center}
-.services{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;justify-items:center}
+.services{
+  display:grid;
+  grid-template-columns:repeat(4, 140px); /* 4 columns */
+  grid-auto-rows: 160px; /* uniform height */
+  gap:16px;
+  justify-content:center; /* center the whole grid */
+}
 .service-card{background:white;padding:14px;border-radius:14px;box-shadow:0 4px 10px rgba(0,0,0,.05);text-align:center;font-size:14px;display:flex;flex-direction:column;align-items:center;gap:6px}
 .dark-mode .service-card{background:#222;box-shadow:0 4px 10px rgba(0,0,0,.3);color:#f0f0f0}
 /* Icons inside cards */
@@ -72,6 +78,12 @@ textarea{width:100%;padding:10px;border-radius:12px;border:1px solid #ddd;margin
 .welcome-overlay p{margin-top:10px;font-style:italic;color:#555}
 /* Dark/Light Toggle */
 .theme-toggle{position:fixed;top:10px;right:10px;padding:8px 14px;background:#16a34a;color:white;border:none;border-radius:8px;cursor:pointer;z-index:2000}
+@media (max-width:640px){
+  .services{
+    grid-template-columns:repeat(2, 140px); /* 2 per row on mobile */
+    grid-auto-rows: 160px;
+  }
+}
 </style>
 </head>
 <body>
