@@ -8,6 +8,33 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <!-- ===== STYLES ===== -->
 <style>
+.print-btn{
+  margin-top:14px;
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:16px;
+  background:linear-gradient(135deg,#16a34a,#22c55e);
+  color:white;
+  font-size:16px;
+  font-weight:600;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  box-shadow:0 8px 20px rgba(22,163,74,0.35);
+  transition:transform .2s, box-shadow .2s;
+}
+
+.print-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 26px rgba(22,163,74,0.45);
+}
+
+.dark-mode .print-btn{
+  background:linear-gradient(135deg,#22c55e,#4ade80);
+}
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Roboto',sans-serif}
 body{background:#f8fafc;color:#222;transition:background .3s,color .3s}
 .dark-mode{background:#121212;color:#f0f0f0}
@@ -95,7 +122,9 @@ textarea{width:100%;padding:10px;border-radius:12px;border:1px solid #ddd;margin
     <div class="ribbon"></div>
     <div class="token-number" id="tokenNo"></div>
     <div class="token-date" id="tokenDate"></div>
-    <button onclick="downloadPDF()">Download PDF</button>
+    <button class="print-btn" onclick="printToken()">
+  🖨️ Print Token
+</button>
   </div>
 </section>
 <!-- FEEDBACK -->
@@ -167,17 +196,69 @@ function takeToken(){
   updateTokenCount();
 }
 /* ================== PDF ================== */
-function downloadPDF(){
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  const t = tokens[tokens.length-1];
-  doc.setFontSize(18);doc.text("COMMUNITY HEALTH CLINIC +",20,20);
-  doc.setFontSize(14);doc.text(`Patient Name: ${t.name}`,20,35);
-  doc.text(`Age: ${t.age}    Sex: ${t.sex}`,20,45);
-  doc.text(`Mobile: ${t.mobile}`,20,55);
-  doc.text(`Token No: ${t.no}`,20,65);
-  doc.text(`Date: ${t.date}`,20,75);
-  doc.save(`Token_${t.name}.pdf`);
+function printToken(){
+  const t = tokens[tokens.length - 1];
+  if(!t){ alert("No token found"); return; }
+
+  const printWindow = window.open("", "", "width=380,height=600");
+
+  printWindow.document.write(`
+    <html>
+    <head>
+      <title>Clinic Token</title>
+      <style>
+        body{
+          font-family:Arial,sans-serif;
+          padding:20px;
+          text-align:center;
+        }
+        .ticket{
+          border:2px dashed #16a34a;
+          border-radius:18px;
+          padding:20px;
+        }
+        h2{
+          margin:0;
+          color:#16a34a;
+        }
+        .token-no{
+          font-size:42px;
+          font-weight:800;
+          margin:14px 0;
+        }
+        .line{
+          margin:6px 0;
+          font-size:14px;
+        }
+        .footer{
+          margin-top:14px;
+          font-size:12px;
+          color:#555;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="ticket">
+        <h2>COMMUNITY HEALTH CLINIC +</h2>
+        <div class="line">Cheenimukku, Poonoor</div>
+        <div class="line"><strong>Date:</strong> ${t.date}</div>
+        <div class="token-no">TOKEN ${t.no}</div>
+        <div class="line"><strong>${t.name}</strong></div>
+        <div class="line">Age: ${t.age} | Sex: ${t.sex}</div>
+        <div class="line">Mobile: ${t.mobile}</div>
+        <div class="footer">
+          Please wait for your turn.<br>
+          Emergency cases will be prioritised.
+        </div>
+      </div>
+      <script>
+        window.onload = () => window.print();
+      </script>
+    </body>
+    </html>
+  `);
+
+  printWindow.document.close();
 }
 /* ================== FEEDBACK ================== */
 let rating=0;
