@@ -19,7 +19,7 @@ body{
 .welcome-overlay{
   position:fixed;
   inset:0;
-  background:rgba(255,255,255,0.92);
+  background:rgba(255,255,255,0.95);
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -32,8 +32,12 @@ body{
   opacity:0;
   pointer-events:none;
 }
-.welcome-overlay h1{font-size:42px;margin:0}
-.welcome-overlay p{margin-top:10px;font-style:italic;color:#555}
+.welcome-overlay h1{
+  font-size:42px;margin:0;text-align:center;
+}
+.welcome-overlay p{
+  margin-top:10px;font-style:italic;color:#555;text-align:center;
+}
 
 /* ===== HEADER ===== */
 header{
@@ -75,6 +79,14 @@ section{padding:20px 16px}
   box-shadow:0 4px 10px rgba(0,0,0,.05);
   text-align:center;
   font-size:14px;
+  position:relative;
+}
+.service-card::after{
+  content:'🏥';
+  position:absolute;
+  top:6px;
+  right:6px;
+  font-size:18px;
 }
 
 /* ===== TOKEN FORM ===== */
@@ -83,6 +95,8 @@ section{padding:20px 16px}
   padding:16px;
   border-radius:18px;
   box-shadow:0 8px 20px rgba(0,0,0,.08);
+  max-width:400px;
+  margin:auto;
 }
 .token-box input,.token-box select{
   width:100%;
@@ -125,6 +139,7 @@ section{padding:20px 16px}
 }
 .token-number{font-size:42px;font-weight:800}
 .token-date{font-size:14px;color:#555}
+.token-count{font-size:14px;color:#555;margin-bottom:8px}
 
 /* ===== FEEDBACK ===== */
 .stars span{
@@ -156,6 +171,8 @@ textarea{
   padding:16px;
   border-radius:16px;
   box-shadow:0 6px 16px rgba(0,0,0,.08);
+  max-width:500px;
+  margin:auto;
 }
 .dashboard ul{padding-left:16px}
 .dashboard button{
@@ -167,15 +184,20 @@ textarea{
   background:#dc2626;
   color:white;
 }
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:480px){
+  .services{grid-template-columns:1fr}
+  .token-box{padding:12px}
+}
 </style>
 </head>
-
 <body>
 
 <!-- WELCOME -->
 <div id="welcomeOverlay" class="welcome-overlay">
   <h1>WELCOME</h1>
-  <p>“Health is the real wealth.”</p>
+  <p id="quote">“Health is the real wealth.”</p>
 </div>
 
 <!-- HEADER -->
@@ -195,16 +217,15 @@ textarea{
     <div class="service-card">IV Fluids</div>
     <div class="service-card">Oxygen</div>
     <div class="service-card">Minor Procedures</div>
-    <div class="service-card">Ear Irrigation</div>
-    <div class="service-card">Home Call (on request)</div>
-    <div class="service-card">Basic Lab Tests</div>
-    <div class="service-card">TT Injection</div>
+    <div class="service-card">Wound Management</div>
+    <div class="service-card">Home Sample Collection (On Request)</div>
   </div>
 </section>
 
 <!-- TOKEN -->
 <section>
-  <div class="section-title">Take Token (Next Day Only)</div>
+  <div class="section-title">Take Token (Next Day: <span id="nextDate"></span>)</div>
+  <div class="token-count" id="tokenCount"></div>
   <div class="token-box">
     <input id="patientName" placeholder="Patient Name">
     <input id="age" type="number" placeholder="Age">
@@ -222,6 +243,7 @@ textarea{
     <div class="ribbon"></div>
     <div class="token-number" id="tokenNo"></div>
     <div class="token-date" id="tokenDate"></div>
+    <button onclick="downloadPDF()">Download Token PDF</button>
   </div>
 </section>
 
@@ -250,76 +272,122 @@ textarea{
     <ul id="tokenList"></ul>
     <h4>Feedback</h4>
     <ul id="feedbackList"></ul>
-    <button id="masterBtn" style="display:none" onclick="clearAll()">Delete / Edit Records</button>
+    <button id="masterBtn" style="display:none" onclick="clearAll()">Delete All Records</button>
   </div>
 </section>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 /* ===== PINS ===== */
 const VIEW_PIN="1234";
 const MASTER_PIN="9999";
 
-/* ===== WELCOME FADE ===== */
+/* ===== WELCOME FADE & QUOTES ===== */
+const quotes=["“Health is the real wealth.”","“An ounce of prevention is worth a pound of cure.”","“A healthy outside starts from the inside.”"];
+let quoteIndex=0;
+const quoteEl=document.getElementById("quote");
+
 document.addEventListener("DOMContentLoaded",()=>{
+  const overlay=document.getElementById("welcomeOverlay");
+  setInterval(()=>{
+    quoteIndex=(quoteIndex+1)%quotes.length;
+    quoteEl.textContent=quotes[quoteIndex];
+  },3000);
+
   setTimeout(()=>{
-    welcomeOverlay.classList.add("hide");
-    setTimeout(()=>welcomeOverlay.style.display="none",1000);
+    overlay.classList.add("hide");
+    setTimeout(()=>overlay.style.display="none",1000);
   },2000);
+
+  updateNextDate();
+  updateTokenCount();
 });
 
 /* ===== HEADER SCROLL ===== */
 window.addEventListener("scroll",()=>{
+  const header=document.getElementById("header");
   header.classList.toggle("scrolled",window.scrollY>10);
 });
 
 /* ===== TOKEN STORAGE ===== */
 let tokens=JSON.parse(localStorage.getItem("tokens")||"[]");
+let feedbacks=JSON.parse(localStorage.getItem("feedbacks")||"[]");
+
+function updateNextDate(){
+  const nextD=new Date(); nextD.setDate(nextD.getDate()+1);
+  document.getElementById("nextDate").textContent=nextD.toDateString();
+}
+
+function updateTokenCount(){
+  document.getElementById("tokenCount").textContent=`Tokens already taken: ${tokens.length}`;
+}
 
 function takeToken(){
-  const now = new Date();
-  if(now.getHours() >= 22){
-    alert("Token booking is closed for today. Please come tomorrow.");
-    return;
-  }
+  const pname=document.getElementById("patientName").value.trim();
+  const ageVal=document.getElementById("age").value;
+  const sexVal=document.getElementById("sex").value;
+  const mobileVal=document.getElementById("mobile").value.trim();
 
-  const pname = patientName.value.trim();
-  const ageVal = age.value;
-  const sexVal = sex.value;
-  const mobileVal = mobile.value.trim();
+  if(!pname || !ageVal || !sexVal || !mobileVal){ alert("Fill all details"); return; }
 
-  if(!pname || !ageVal || !sexVal || !mobileVal){
-    alert("Fill all details");
-    return;
-  }
-
+  // check if token already taken for same name/age/sex
   if(tokens.find(t=>t.name===pname && t.age===ageVal && t.sex===sexVal)){
-    alert("Token already taken");
+    alert("Token already taken"); return;
+  }
+
+  // Check 10 PM limit
+  const now=new Date();
+  if(now.getHours()>=22){
+    alert("Token cannot be taken after 10 PM for next day.");
     return;
   }
 
-  const no = tokens.length + 1;
-  const d = new Date();
-  d.setDate(d.getDate()+1);
+  const no=tokens.length+1;
+  const nextD=new Date(); nextD.setDate(nextD.getDate()+1);
 
-  tokens.push({no,name:pname,age:ageVal,sex:sexVal,mobile:mobileVal});
+  tokens.push({no,name:pname,age:ageVal,sex:sexVal,mobile:mobileVal,date:nextD.toDateString()});
   localStorage.setItem("tokens",JSON.stringify(tokens));
 
-  tokenNo.textContent = "TOKEN " + no;
-  tokenDate.textContent = d.toDateString();
-  tokenResult.style.display = "block";
+  document.getElementById("tokenNo").textContent="TOKEN "+no;
+  document.getElementById("tokenDate").textContent="Date: "+nextD.toDateString();
+  document.getElementById("tokenResult").style.display="block";
+
+  updateTokenCount();
+  generatePDF(no,pname,ageVal,sexVal,mobileVal,nextD.toDateString());
+
+  // Clear inputs
+  document.getElementById("patientName").value="";
+  document.getElementById("age").value="";
+  document.getElementById("sex").value="";
+  document.getElementById("mobile").value="";
+}
+
+/* ===== PDF DOWNLOAD ===== */
+function generatePDF(no,name,age,sex,mobile,date){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  doc.setFontSize(18);
+  doc.text("Community Health Clinic Token",20,20);
+  doc.setFontSize(14);
+  doc.text(`Token No: ${no}`,20,35);
+  doc.text(`Date: ${date}`,20,45);
+  doc.text(`Name: ${name}`,20,55);
+  doc.text(`Age: ${age}`,20,65);
+  doc.text(`Sex: ${sex}`,20,75);
+  doc.text(`Mobile: ${mobile}`,20,85);
+  doc.save(`Token_${no}_${name}.pdf`);
 }
 
 /* ===== FEEDBACK ===== */
 let rating=0;
-let feedbacks=JSON.parse(localStorage.getItem("feedbacks")||"[]");
+const stars=document.getElementById("stars");
 stars.querySelectorAll("span").forEach(s=>{
-  s.onclick=()=>{
-    rating=s.dataset.v;
-    stars.querySelectorAll("span").forEach(x=>x.classList.toggle("active",x.dataset.v<=rating));
-  };
+  s.onmouseover=()=>stars.querySelectorAll("span").forEach(x=>x.classList.toggle("active",x.dataset.v<=s.dataset.v));
+  s.onmouseout=()=>stars.querySelectorAll("span").forEach(x=>x.classList.toggle("active",x.dataset.v<=rating));
+  s.onclick=()=>{rating=s.dataset.v; stars.querySelectorAll("span").forEach(x=>x.classList.toggle("active",x.dataset.v<=rating));};
 });
 function submitFeedback(){
-  if(!rating){alert("Select stars");return;}
+  if(!rating){alert("Select stars"); return;}
   feedbacks.push({rating,text:fbText.value,time:new Date().toLocaleString()});
   localStorage.setItem("feedbacks",JSON.stringify(feedbacks));
   alert("Thank you!");
@@ -328,20 +396,24 @@ function submitFeedback(){
 
 /* ===== DASHBOARD ===== */
 function checkPin(){
-  if(pinInput.value===VIEW_PIN||pinInput.value===MASTER_PIN){
+  const pin=document.getElementById("pinInput").value;
+  const dashboard=document.getElementById("dashboard");
+  const masterBtn=document.getElementById("masterBtn");
+  if(pin===VIEW_PIN||pin===MASTER_PIN){
     dashboard.style.display="block";
-    masterBtn.style.display=pinInput.value===MASTER_PIN?"block":"none";
+    masterBtn.style.display=pin===MASTER_PIN?"block":"none";
     loadDashboard();
-  }else alert("Invalid PIN");
+  } else alert("Invalid PIN");
 }
 function loadDashboard(){
-  tokenList.innerHTML="";
+  const tokenList=document.getElementById("tokenList");
+  const feedbackList=document.getElementById("feedbackList");
+  tokenList.innerHTML=""; feedbackList.innerHTML="";
   tokens.forEach(t=>{
     const li=document.createElement("li");
-    li.textContent=`#${t.no} ${t.name} (${t.age}/${t.sex}) - ${t.mobile}`;
+    li.textContent=`#${t.no} ${t.name} (${t.age}/${t.sex}) - ${t.mobile} - ${t.date}`;
     tokenList.appendChild(li);
   });
-  feedbackList.innerHTML="";
   feedbacks.forEach(f=>{
     const li=document.createElement("li");
     li.textContent=`⭐${f.rating} - ${f.text} (${f.time})`;
@@ -355,6 +427,5 @@ function clearAll(){
   }
 }
 </script>
-
 </body>
 </html>
