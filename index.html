@@ -32,13 +32,8 @@ body.dark header { background:#1e1e1e; }
 body.dark header.scrolled { background: rgba(30,30,30,.8); }
 
 .since { font-size: 12px; color:#777; }
-.clinic { font-size: 22px; font-weight: 700; }
-.plus { color:#facc15; }
-.address { font-size: 13px; color:#666; }
-.contact { font-size: 14px; margin-top: 4px; }
-.badge { display:inline-block; margin-top:6px; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600; }
-.open { background:#16a34a; color:white; }
-.closed { background:#dc2626; color:white; }
+
+body.dark .since { color:#ccc; } .clinic { font-size: 22px; font-weight: 700; display:flex; align-items:center; justify-content:center; gap:8px; } .plus { color:#facc15; } .address { font-size: 13px; color:#666; } body.dark .address { color:#d1d5db; } .contact { font-size: 14px; margin-top: 4px; } .badge { display:inline-block; margin-top:6px; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600; } .open { background:#16a34a; color:white; } .closed { background:#dc2626; color:white; }
 
 .theme-btn {
   position: fixed; top: 10px; right: 10px; z-index: 2000;
@@ -71,24 +66,27 @@ body.dark .service { background:#222; color:#f0f0f0; box-shadow:0 4px 12px rgba(
 
   </style>
 </head>
-<body>  <!-- 1️⃣ WELCOME -->  <div id="welcome" class="welcome">
+<body>  <!-- 1️⃣ WELCOME -->  <div id="welcome" class="welcome" style="pointer-events:none;">
     <h1>WELCOME</h1>
     <p id="quote">“Health is the real wealth.”</p>
   </div><button class="theme-btn" onclick="toggleTheme()">Dark / Light</button>
 
   <!-- 2️⃣ HEADER -->  <header id="header">
     <div class="since">Since 2003</div>
-    <div class="clinic">COMMUNITY HEALTH CLINIC <span class="plus">+</span></div>
+    <div class="clinic">COMMUNITY HEALTH CLINIC <img src="https://img.icons8.com/color/48/medical-doctor.png" alt="Health emblem" style="width:22px;height:22px"></div>
     <div class="address">Cheenimukku, Poonoor</div>
     <div class="contact">📞 9961252798</div>
     <div id="opBadge" class="badge">Checking OP…</div>
-  </header>  <!-- 3️⃣ SERVICES -->  <section>
+  </header>  <!-- 3️⃣ SERVICES -->  <!-- SIDE BOOKMARK PLACEHOLDER --><div style="position:fixed;left:6px;top:40%;z-index:1500;display:flex;flex-direction:column;gap:10px;">
+  <div style="writing-mode:vertical-rl;transform:rotate(180deg);background:#16a34a;color:white;padding:10px 6px;border-radius:10px;font-size:12px;font-weight:600;">Community Health Clinic</div>
+  <div style="writing-mode:vertical-rl;transform:rotate(180deg);background:#e5e7eb;color:#555;padding:10px 6px;border-radius:10px;font-size:12px;opacity:.6;">(Future)</div>
+</div><section>
     <div class="section-title">Services</div>
     <div class="services">
       <div class="service"><img src="https://img.icons8.com/color/48/stethoscope.png"><span>General OP</span></div>
       <div class="service"><img src="https://img.icons8.com/color/48/lungs.png"><span>Nebulisation</span></div>
       <div class="service"><img src="https://img.icons8.com/color/48/heart-with-pulse.png"><span>ECG</span></div>
-      <div class="service"><img src="https://cdn-icons-png.flaticon.com/512/4006/4006511.png"><span>IV Fluids</span></div>
+      <div class="service"><img src="https://img.icons8.com/color/48/iv-bag.png"><span>IV Fluids</span></div>
       <div class="service"><img src="https://img.icons8.com/color/48/oxygen.png"><span>Oxygen</span></div>
       <div class="service"><img src="https://img.icons8.com/color/48/wound.png"><span>Wound Care</span></div>
       <div class="service"><img src="https://img.icons8.com/color/48/surgical-scissors.png"><span>Minor Procedures</span></div>
