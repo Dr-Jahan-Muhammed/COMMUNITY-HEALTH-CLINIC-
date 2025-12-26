@@ -6,7 +6,6 @@
 <title>Community Health Clinic</title>
 
 <style>
-/* ===== BASE ===== */
 *{box-sizing:border-box}
 body{
   margin:0;
@@ -15,34 +14,23 @@ body{
   color:#222;
 }
 
-/* ===== WELCOME OVERLAY ===== */
+/* WELCOME */
 .welcome-overlay{
-  position:fixed;
-  inset:0;
+  position:fixed; inset:0;
   background:rgba(255,255,255,0.92);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
   z-index:5000;
-  opacity:1;
   transition:opacity 1s ease;
 }
-.welcome-overlay.hide{
-  opacity:0;
-  pointer-events:none;
-}
+.welcome-overlay.hide{opacity:0; pointer-events:none;}
 .welcome-overlay h1{font-size:42px;margin:0}
 .welcome-overlay p{margin-top:10px;font-style:italic;color:#555}
 
-/* ===== HEADER ===== */
+/* HEADER */
 header{
-  position:sticky;
-  top:0;
-  z-index:1000;
-  background:white;
-  padding:14px;
-  text-align:center;
+  position:sticky; top:0; z-index:1000;
+  background:white; padding:14px; text-align:center;
   transition:.3s;
 }
 header.scrolled{
@@ -54,68 +42,48 @@ header.scrolled{
 .plus{color:#facc15;font-weight:900}
 .address{font-size:13px;color:#666}
 
-/* ===== SECTIONS ===== */
+/* SECTIONS */
 section{padding:20px 16px}
-.section-title{
-  font-size:20px;
-  font-weight:600;
-  margin-bottom:14px;
-}
+.section-title{font-size:20px;font-weight:600;margin-bottom:14px}
 
-/* ===== SERVICES ===== */
+/* SERVICES */
 .services{
   display:grid;
   grid-template-columns:repeat(2,1fr);
   gap:12px;
 }
 .service-card{
-  background:white;
-  padding:14px;
+  background:white; padding:14px;
   border-radius:14px;
   box-shadow:0 4px 10px rgba(0,0,0,.05);
-  text-align:center;
-  font-size:14px;
+  text-align:center; font-size:14px;
 }
 
-/* ===== TOKEN FORM ===== */
+/* TOKEN */
 .token-box{
-  background:white;
-  padding:16px;
+  background:white; padding:16px;
   border-radius:18px;
   box-shadow:0 8px 20px rgba(0,0,0,.08);
 }
 .token-box input,.token-box select{
-  width:100%;
-  padding:10px;
+  width:100%; padding:10px;
   margin-bottom:10px;
   border-radius:10px;
   border:1px solid #ddd;
 }
 .token-box button{
-  width:100%;
-  padding:12px;
-  border:none;
-  border-radius:12px;
-  background:#16a34a;
-  color:white;
-  font-size:16px;
+  width:100%; padding:12px;
+  border:none; border-radius:12px;
+  background:#16a34a; color:white; font-size:16px;
 }
-
-/* ===== TOKEN DISPLAY ===== */
 .token-display{
-  margin-top:16px;
-  padding:18px;
-  background:#ecfeff;
-  border-radius:18px;
-  text-align:center;
-  position:relative;
-  overflow:hidden;
+  margin-top:16px; padding:18px;
+  background:#ecfeff; border-radius:18px;
+  text-align:center; position:relative; overflow:hidden;
 }
 .ribbon{
-  position:absolute;
-  top:10px;
-  width:200%;
-  height:6px;
+  position:absolute; top:10px;
+  width:200%; height:6px;
   background:linear-gradient(90deg,#22c55e,#3b82f6,#22c55e);
   animation:ribbon 4s linear infinite;
 }
@@ -126,46 +94,33 @@ section{padding:20px 16px}
 .token-number{font-size:42px;font-weight:800}
 .token-date{font-size:14px;color:#555}
 
-/* ===== FEEDBACK ===== */
+/* FEEDBACK */
 .stars span{
-  font-size:28px;
-  cursor:pointer;
-  color:#ccc;
+  font-size:28px; cursor:pointer; color:#ccc;
 }
 .stars span.active{color:#facc15}
 textarea{
-  width:100%;
-  padding:10px;
-  border-radius:12px;
-  border:1px solid #ddd;
+  width:100%; padding:10px;
+  border-radius:12px; border:1px solid #ddd;
   margin-top:10px;
 }
 .feedback-btn{
-  margin-top:10px;
-  padding:10px;
-  width:100%;
-  border:none;
-  border-radius:12px;
-  background:#2563eb;
-  color:white;
+  margin-top:10px; padding:10px;
+  width:100%; border:none;
+  border-radius:12px; background:#2563eb; color:white;
 }
 
-/* ===== DASHBOARD ===== */
+/* DASHBOARD */
 .dashboard{
-  background:white;
-  padding:16px;
+  background:white; padding:16px;
   border-radius:16px;
   box-shadow:0 6px 16px rgba(0,0,0,.08);
 }
 .dashboard ul{padding-left:16px}
 .dashboard button{
-  margin-top:10px;
-  padding:10px;
-  width:100%;
-  border:none;
-  border-radius:10px;
-  background:#dc2626;
-  color:white;
+  margin-top:10px; padding:10px;
+  width:100%; border:none;
+  border-radius:10px; background:#dc2626; color:white;
 }
 </style>
 </head>
@@ -178,14 +133,12 @@ textarea{
   <p>“Health is the real wealth.”</p>
 </div>
 
-<!-- HEADER -->
 <header id="header">
   <div class="since">Since 2003</div>
   <div class="clinic-name">COMMUNITY HEALTH CLINIC <span class="plus">+</span></div>
   <div class="address">Cheenimukku, Poonoor</div>
 </header>
 
-<!-- SERVICES -->
 <section>
   <div class="section-title">Services</div>
   <div class="services">
@@ -198,13 +151,12 @@ textarea{
   </div>
 </section>
 
-<!-- TOKEN -->
 <section>
   <div class="section-title">Take Token (Next Day Only)</div>
   <div class="token-box">
-    <input id="Patient Name" placeholder="Patient Name">
-    <input id="Age" type="number" placeholder="Age">
-    <select id="Sex">
+    <input id="patientName" placeholder="Patient Name">
+    <input id="age" type="number" placeholder="Age">
+    <select id="sex">
       <option value="">Sex</option>
       <option>Male</option>
       <option>Female</option>
@@ -221,7 +173,6 @@ textarea{
   </div>
 </section>
 
-<!-- FEEDBACK -->
 <section>
   <div class="section-title">Feedback</div>
   <div class="stars" id="stars">
@@ -235,7 +186,6 @@ textarea{
   <button class="feedback-btn" onclick="submitFeedback()">Submit</button>
 </section>
 
-<!-- DASHBOARD -->
 <section>
   <div class="section-title">Authorized Access</div>
   <input id="pinInput" type="password" placeholder="Enter PIN">
@@ -251,11 +201,12 @@ textarea{
 </section>
 
 <script>
-/* ===== PINS (EDIT HERE) ===== */
 const VIEW_PIN="1234";
 const MASTER_PIN="9999";
 
-/* ===== WELCOME FADE ===== */
+const welcomeOverlay=document.getElementById("welcomeOverlay");
+const header=document.getElementById("header");
+
 document.addEventListener("DOMContentLoaded",()=>{
   setTimeout(()=>{
     welcomeOverlay.classList.add("hide");
@@ -263,33 +214,28 @@ document.addEventListener("DOMContentLoaded",()=>{
   },2000);
 });
 
-/* ===== HEADER SCROLL ===== */
 window.addEventListener("scroll",()=>{
   header.classList.toggle("scrolled",window.scrollY>10);
 });
 
-/* ===== TOKEN STORAGE ===== */
 let tokens=JSON.parse(localStorage.getItem("tokens")||"[]");
 
 function takeToken(){
-  const pname = document.getElementById("patientName").value.trim();
-  const ageVal = document.getElementById("age").value;
-  const sexVal = document.getElementById("sex").value;
-  const mobileVal = document.getElementById("mobile").value.trim();
+  const pname=patientName.value.trim();
+  const ageVal=age.value;
+  const sexVal=sex.value;
+  const mobileVal=mobile.value.trim();
 
-  if(!pname || !ageVal || !sexVal || !mobileVal){
-    alert("Fill all details");
-    return;
+  if(!pname||!ageVal||!sexVal||!mobileVal){
+    alert("Fill all details"); return;
   }
 
   if(tokens.find(t=>t.name===pname && t.age===ageVal && t.sex===sexVal)){
-    alert("Token already taken");
-    return;
+    alert("Token already taken"); return;
   }
 
-  const no = tokens.length + 1;
-  const d = new Date();
-  d.setDate(d.getDate()+1);
+  const no=tokens.length+1;
+  const d=new Date(); d.setDate(d.getDate()+1);
 
   tokens.push({no,name:pname,age:ageVal,sex:sexVal,mobile:mobileVal});
   localStorage.setItem("tokens",JSON.stringify(tokens));
@@ -298,36 +244,25 @@ function takeToken(){
   tokenDate.textContent=d.toDateString();
   tokenResult.style.display="block";
 }
-  if(tokens.find(t=>t.name==name.value&&t.age==age.value&&t.sex==sex.value)){
-    alert("Token already taken");return;
-  }
-  const no=tokens.length+1;
-  const d=new Date();d.setDate(d.getDate()+1);
-  tokens.push({no,name:name.value,age:age.value,sex:sex.value});
-  localStorage.setItem("tokens",JSON.stringify(tokens));
-  tokenNo.textContent="TOKEN "+no;
-  tokenDate.textContent=d.toDateString();
-  tokenResult.style.display="block";
-}
 
-/* ===== FEEDBACK ===== */
 let rating=0;
 let feedbacks=JSON.parse(localStorage.getItem("feedbacks")||"[]");
+
 stars.querySelectorAll("span").forEach(s=>{
   s.onclick=()=>{
     rating=s.dataset.v;
     stars.querySelectorAll("span").forEach(x=>x.classList.toggle("active",x.dataset.v<=rating));
   };
 });
+
 function submitFeedback(){
-  if(!rating){alert("Select stars");return;}
+  if(!rating){alert("Select stars"); return;}
   feedbacks.push({rating,text:fbText.value,time:new Date().toLocaleString()});
   localStorage.setItem("feedbacks",JSON.stringify(feedbacks));
   alert("Thank you!");
   fbText.value="";
 }
 
-/* ===== DASHBOARD ===== */
 function checkPin(){
   if(pinInput.value===VIEW_PIN||pinInput.value===MASTER_PIN){
     dashboard.style.display="block";
@@ -335,6 +270,7 @@ function checkPin(){
     loadDashboard();
   }else alert("Invalid PIN");
 }
+
 function loadDashboard(){
   tokenList.innerHTML="";
   tokens.forEach(t=>{
@@ -342,6 +278,7 @@ function loadDashboard(){
     li.textContent=`#${t.no} ${t.name} (${t.age}/${t.sex})`;
     tokenList.appendChild(li);
   });
+
   feedbackList.innerHTML="";
   feedbacks.forEach(f=>{
     const li=document.createElement("li");
@@ -349,6 +286,7 @@ function loadDashboard(){
     feedbackList.appendChild(li);
   });
 }
+
 function clearAll(){
   if(confirm("Delete all records?")){
     localStorage.clear();
