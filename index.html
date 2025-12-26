@@ -11,19 +11,15 @@
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Roboto',sans-serif}
 body{background:#f8fafc;color:#222;transition:background .3s,color .3s}
 .dark-mode{background:#121212;color:#f0f0f0}
-
 header{position:sticky;top:0;background:white;padding:14px;text-align:center;transition:.3s;z-index:1000}
 header.scrolled{background:rgba(255,255,255,.7);backdrop-filter:blur(10px)}
 .dark-mode header{background:#1e1e1e}
-
 .since{font-size:12px;color:#777}
 .clinic-name{font-size:22px;font-weight:700}
 .plus{color:#facc15;font-weight:900}
 .address{font-size:13px;color:#666}
-
 section{padding:20px 16px}
 .section-title{font-size:20px;font-weight:600;margin-bottom:14px;text-align:center}
-
 .services{
   display:grid;
   grid-template-columns:repeat(4, 140px);
@@ -45,7 +41,6 @@ section{padding:20px 16px}
 }
 .dark-mode .service-card{background:#222;box-shadow:0 4px 10px rgba(0,0,0,.3);color:#f0f0f0}
 .service-card img{width:40px;height:40px}
-
 .token-container{display:flex;flex-direction:column;align-items:center;justify-content:center;max-width:400px;margin:0 auto;padding:20px}
 .token-box{background:white;padding:20px;border-radius:18px;box-shadow:0 8px 20px rgba(0,0,0,.08);width:100%}
 .dark-mode .token-box{background:#1e1e1e;color:#f0f0f0}
@@ -56,26 +51,20 @@ section{padding:20px 16px}
 @keyframes ribbon{from{transform:translateX(-50%)}to{transform:translateX(0)}}
 .token-number{font-size:36px;font-weight:800}
 .token-date{font-size:14px;color:#555}
-
 .stars span{font-size:28px;cursor:pointer;color:#ccc}
 .stars span.active{color:#facc15}
-
 textarea{width:100%;padding:10px;border-radius:12px;border:1px solid #ddd;margin-top:10px}
 .feedback-btn{margin-top:10px;padding:10px;width:100%;border:none;border-radius:12px;background:#2563eb;color:white;cursor:pointer}
-
 .dashboard{background:white;padding:16px;border-radius:16px;box-shadow:0 6px 16px rgba(0,0,0,.08)}
 .dashboard ul{padding-left:16px;max-height:200px;overflow-y:auto}
 .dashboard button{margin-top:10px;padding:10px;width:100%;border:none;border-radius:10px;background:#dc2626;color:white;cursor:pointer}
-
 /* Welcome overlay */
 .welcome-overlay{position:fixed;inset:0;background:rgba(255,255,255,0.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:5000;opacity:1;transition:opacity 1s ease}
 .welcome-overlay.hide{opacity:0;pointer-events:none}
 .welcome-overlay h1{font-size:42px;margin:0}
 .welcome-overlay p{margin-top:10px;font-style:italic;color:#555}
-
 /* Dark/Light Toggle */
 .theme-toggle{position:fixed;top:10px;right:10px;padding:8px 14px;background:#16a34a;color:white;border:none;border-radius:8px;cursor:pointer;z-index:2000}
-
 .print-btn{
   margin-top:14px;width:100%;padding:14px;border:none;border-radius:16px;
   background:linear-gradient(135deg,#16a34a,#22c55e);
@@ -91,30 +80,68 @@ textarea{width:100%;padding:10px;border-radius:12px;border:1px solid #ddd;margin
 .dark-mode .print-btn{
   background:linear-gradient(135deg,#22c55e,#4ade80);
 }
-
 @media (max-width:640px){
   .services{grid-template-columns:repeat(2,140px);grid-auto-rows:160px;}
 }
 </style>
 </head>
 <body>
-
 <!-- WELCOME -->
 <div id="welcomeOverlay" class="welcome-overlay">
   <h1>WELCOME</h1>
   <p id="healthQuote">“Health is the real wealth.”</p>
 </div>
-
+<style>
+.welcome-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255,255,255,0.92);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 5000;
+  opacity: 1;
+  transition: opacity 1s ease;
+}
+.welcome-overlay.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+</style>
+<script>
+window.addEventListener('load', () => {
+  const overlay = document.getElementById('welcomeOverlay');
+  // fade out after 2 seconds
+  setTimeout(() => {
+    overlay.classList.add('hide');
+    // remove from DOM after fade
+    setTimeout(() => {
+      overlay.remove();
+    }, 1000); // 1s fade duration
+  }, 2000); // wait 2 seconds before fading
+});
+</script>
+window.addEventListener('load', () => {
+  const overlay = document.getElementById('welcomeOverlay');
+  // fade out after 2 seconds
+  setTimeout(() => {
+    overlay.classList.add('hide');
+    // remove from DOM after fade
+    setTimeout(() => {
+      overlay.remove();
+    }, 1000); // 1s fade duration
+  }, 2000); // wait 2 seconds before fading
+});
+</script>
 <!-- THEME TOGGLE -->
 <button class="theme-toggle" onclick="toggleTheme()">Dark/Light</button>
-
 <!-- HEADER -->
 <header id="header">
   <div class="since">Since 2003</div>
   <div class="clinic-name">COMMUNITY HEALTH CLINIC <span class="plus">+</span></div>
   <div class="address">Cheenimukku, Poonoor</div>
 </header>
-
 <!-- SERVICES -->
 <section>
   <div class="section-title">Services</div>
@@ -129,7 +156,6 @@ textarea{width:100%;padding:10px;border-radius:12px;border:1px solid #ddd;margin
     <div class="service-card"><img src="https://img.icons8.com/color/48/000000/test-tube.png"/><span>Home Sample Collection</span></div>
   </div>
 </section>
-
 <!-- TOKEN -->
 <section class="token-container">
   <div class="section-title">Take Token (<span id="nextDate"></span>)</div>
@@ -153,7 +179,6 @@ textarea{width:100%;padding:10px;border-radius:12px;border:1px solid #ddd;margin
     <button class="print-btn" onclick="printToken()">🖨️ Print Token</button>
   </div>
 </section>
-
 <!-- FEEDBACK -->
 <section>
   <div class="section-title">Feedback</div>
@@ -167,7 +192,6 @@ textarea{width:100%;padding:10px;border-radius:12px;border:1px solid #ddd;margin
   <textarea id="fbText" placeholder="Your feedback"></textarea>
   <button class="feedback-btn" onclick="submitFeedback()">Submit</button>
 </section>
-
 <!-- DASHBOARD -->
 <section>
   <div class="section-title">Authorized Access</div>
@@ -181,14 +205,12 @@ textarea{width:100%;padding:10px;border-radius:12px;border:1px solid #ddd;margin
     <button id="masterBtn" style="display:none" onclick="clearAll()">Delete All Records</button>
   </div>
 </section>
-
 <!-- ===== SCRIPTS ===== -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 /* SETTINGS */
 const VIEW_PIN="1234";
 const MASTER_PIN="9999";
-
 /* WELCOME OVERLAY & QUOTE */
 const welcomeOverlay = document.getElementById("welcomeOverlay");
 const quotes=["Health is the real wealth.","An ounce of prevention is worth a pound of cure.","Take care of your body, it's the only place you live.","Healthy mind, healthy body."];
@@ -198,25 +220,20 @@ function rotateQuotes(){
   qIndex=(qIndex+1)%quotes.length;
 }
 setInterval(rotateQuotes,4000);
-
 // fade out welcome overlay
 setTimeout(() => {
   welcomeOverlay.classList.add("hide");
   setTimeout(()=>{welcomeOverlay.style.display="none";},1000);
 },2000);
-
 /* HEADER SCROLL */
 const header=document.getElementById("header");
 window.addEventListener("scroll",()=>{header.classList.toggle("scrolled",window.scrollY>10)});
-
 /* TOKEN */
 let tokens=JSON.parse(localStorage.getItem("tokens")||"[]");
 let nextDate=new Date(); nextDate.setDate(nextDate.getDate()+1);
 document.getElementById("nextDate").textContent=nextDate.toDateString();
-
 function updateTokenCount(){document.getElementById("tokenCountDisplay").textContent=`Tokens taken: ${tokens.length}`;}
 updateTokenCount();
-
 function takeToken(){
   const pname=document.getElementById("patientName").value.trim();
   const ageVal=document.getElementById("age").value;
@@ -234,7 +251,6 @@ function takeToken(){
   document.getElementById("tokenResult").style.display="block";
   updateTokenCount();
 }
-
 /* PRINT TOKEN */
 function printToken(){
   const t=tokens[tokens.length-1];
@@ -267,7 +283,6 @@ function printToken(){
   `);
   printWindow.document.close();
 }
-
 /* FEEDBACK */
 let rating=0;
 let feedbacks=JSON.parse(localStorage.getItem("feedbacks")||"[]");
@@ -284,14 +299,12 @@ function submitFeedback(){
   alert("Thank you!"); fbText.value=""; rating=0;
   document.querySelectorAll("#stars span").forEach(s=>s.classList.remove("active"));
 }
-
 /* DASHBOARD */
 const dashboard=document.getElementById("dashboard");
 const pinInput=document.getElementById("pinInput");
 const masterBtn=document.getElementById("masterBtn");
 const tokenList=document.getElementById("tokenList");
 const feedbackList=document.getElementById("feedbackList");
-
 function checkPin(){
   if(pinInput.value===VIEW_PIN||pinInput.value===MASTER_PIN){
     dashboard.style.display="block";
@@ -299,7 +312,6 @@ function checkPin(){
     loadDashboard();
   } else alert("Invalid PIN");
 }
-
 function loadDashboard(){
   tokenList.innerHTML="";
   tokens.forEach(t=>{
@@ -314,9 +326,7 @@ function loadDashboard(){
     feedbackList.appendChild(li);
   });
 }
-
 function clearAll(){if(confirm("Delete all records?")){localStorage.clear();location.reload();}}
-
 /* THEME */
 function toggleTheme(){document.body.classList.toggle("dark-mode");}
 </script>
