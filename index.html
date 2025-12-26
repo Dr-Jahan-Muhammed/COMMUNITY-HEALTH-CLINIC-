@@ -10,46 +10,54 @@
 body{background:#f8fafc;color:#222;transition:.3s;position:relative}
 body.dark{background:#121212;color:#f1f1f1}
 
-/* ===== SIDEBAR ===== */
-#sidebar{
-  position:fixed;
-  left:0; top:50%;
-  transform:translateY(-50%);
-  width:50px;
-  background:rgba(255,255,255,.95);
-  border-radius:0 12px 12px 0;
-  box-shadow:2px 0 6px rgba(0,0,0,.1);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  padding:8px 0;
-  z-index:2000;
+/* ===== ROTATED  ===== */
+#sidebar-wrapper {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  z-index: 2000;
 }
-body.dark #sidebar{background:rgba(30,30,30,.95)}
-.sidebar-btn{
-  width:40px; height:40px;
-  margin:8px 0;
-  border-radius:12px;
-  background:#16a34a;
-  display:flex; justify-content:center; align-items:center;
-  color:white; font-size:12px;
-  cursor:pointer;
-  writing-mode:vertical-rl;
-  text-orientation:mixed;
-  text-align:center;
+
+#sidebar {
+  writing-mode: vertical-rl; /* rotates text 90° */
+  text-orientation: mixed;
+  background-color: #16a34a; /* green for CHC */
+  padding: 8px 12px;
+  border-radius: 0 12px 12px 0;
 }
-.sidebar-btn.current{background:#2563eb}
-.sidebar-btn:hover{transform:scale(1.1)}
-.sidebar-theme{
-  margin-top:8px;
-  width:28px; height:28px;
-  border-radius:50%;
-  border:none;
-  background:#facc15;
-  color:#111;
-  display:flex; justify-content:center; align-items:center;
-  cursor:pointer;
-  font-size:14px;
+#sidebar-toggle-wrapper {
+  margin-top: 12px; /* space below the sidebar tab */
+}
+    
+.sidebar-btn {
+  font-weight: 700;
+  font-size: 12px;
+  color: #fff;
+  white-space: nowrap;
+}
+
+/* Move toggle below the sidebar */
+#sidebar-toggle-wrapper {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.sidebar-theme {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: #facc15;
+  color: #111;
+  display: flex; justify-content: center; align-items: center;
+  cursor: pointer;
+  font-size: 14px;
 }
 
 /* ===== MAIN ===== */
@@ -154,19 +162,21 @@ body.dark .service-card{background:#222;color:#eee}
 /* ===== MOBILE ===== */
 @media(max-width:640px){
   .services{grid-template-columns:repeat(2,140px)}
-  #sidebar{width:40px}
+  #sidebar-wrapper{left:0; top:50%; transform:translateY(-50%) scale(0.85)}
 }
 </style>
 </head>
 
 <body>
 
-<!-- SIDEBAR -->
-<div id="sidebar">
-  <div class="sidebar-btn current" title="Community Health Clinic">CHC</div>
-  <!-- Theme toggle below CHC -->
-  <button class="sidebar-theme" id="themeToggle">☀️</button>
-  <div style="height:40px;margin:8px 0"></div> <!-- empty space for future pages -->
+<!-- SIDEBAR WRAPPER -->
+<div id="sidebar-wrapper">
+  <div id="sidebar">
+    <div class="sidebar-btn current">COMMUNITY HEALTH CLINIC</div>
+  </div>
+  <div id="sidebar-toggle-wrapper">
+    <button class="sidebar-theme" id="themeToggle">☀️</button>
+  </div>
 </div>
 
 <!-- MAIN -->
@@ -182,8 +192,7 @@ body.dark .service-card{background:#222;color:#eee}
   <div class="since">Since 2003</div>
   <div class="clinic-name">
     COMMUNITY HEALTH CLINIC
-    <!-- Original IV fluids icon restored for clinic -->
-    <img src="https://cdn-icons-png.flaticon.com/512/4006/4006511.png" alt="Clinic Icon" style="height:1.1em; width:auto; margin-left:6px;">
+    <img src="https://cdn-icons-png.flaticon.com/512/4006/4006511.png" alt="Clinic Icon">
   </div>
   <div class="address">Cheenimukku, Poonoor</div>
   <div class="contact">📞 9961252798</div>
@@ -209,7 +218,6 @@ body.dark .service-card{background:#222;color:#eee}
       ECG
     </div>
     <div class="service-card">
-      <!-- IV Fluids icon restored -->
       <img src="https://cdn-icons-png.flaticon.com/512/4006/4006511.png">
       IV Fluids
     </div>
