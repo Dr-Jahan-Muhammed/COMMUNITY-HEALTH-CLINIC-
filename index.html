@@ -5,232 +5,289 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Community Health Clinic</title>
 
-<!-- ===== 1. STYLE ===== -->
-<style>
-/* 1.1 Base */
-*{box-sizing:border-box}
-body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;background:#f8fafc;color:#222;}
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
-/* 1.2 Welcome Overlay */
-.welcome-overlay{position:fixed;inset:0;background:rgba(255,255,255,0.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:5000;opacity:1;transition:opacity 1s ease;}
-.welcome-overlay.hide{opacity:0;pointer-events:none;}
+<style>
+/* ===== BASE ===== */
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:'Roboto',sans-serif;
+  background:#f8fafc;
+  color:#111;
+  transition: background .3s, color .3s;
+}
+.dark-mode{background:#0f172a;color:#f1f5f9;}
+.dark-mode header{background:#111827;}
+.dark-mode .service-card{background:#1f2937;color:#f1f5f9;}
+.dark-mode .token-box{background:#1f2937;color:#f1f5f9;}
+.dark-mode .token-display{background:#065f46;color:#f1f5f9;}
+.dark-mode .dashboard{background:#1f2937;color:#f1f5f9;}
+
+/* ===== WELCOME OVERLAY ===== */
+.welcome-overlay{
+  position:fixed; inset:0;
+  background:rgba(255,255,255,0.92);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  z-index:5000;
+  opacity:1; transition:opacity 1s ease;
+}
+.dark-mode .welcome-overlay{background:rgba(17,24,39,0.95);}
+.welcome-overlay.hide{opacity:0; pointer-events:none;}
 .welcome-overlay h1{font-size:42px;margin:0;}
 .welcome-overlay p{margin-top:10px;font-style:italic;color:#555;}
 
-/* 1.3 Header */
-header{position:sticky;top:0;z-index:1000;background:white;padding:14px;text-align:center;transition:.3s;}
-header.scrolled{background:rgba(255,255,255,.7);backdrop-filter:blur(10px);}
-.since{font-size:12px;color:#777}
-.clinic-name{font-size:22px;font-weight:700}
-.plus{color:#facc15;font-weight:900}
-.address{font-size:13px;color:#666}
+/* ===== HEADER ===== */
+header{
+  position:sticky; top:0; z-index:1000;
+  background:white; padding:14px;
+  text-align:center; transition:.3s; backdrop-filter:blur(10px);
+}
+header.scrolled{background:rgba(255,255,255,.7);}
+.dark-mode header.scrolled{background:rgba(17,24,39,.7);}
+.since{font-size:12px;color:#777;}
+.clinic-name{font-size:22px;font-weight:700;}
+.plus{color:#facc15;font-weight:900;}
+.address{font-size:13px;color:#666;}
 
-/* 1.4 Sections */
-section{padding:20px 16px}
-.section-title{font-size:20px;font-weight:600;margin-bottom:14px}
+/* ===== THEME TOGGLE ===== */
+.theme-btn{
+  position:absolute; right:16px; top:16px;
+  padding:6px 12px; border:none;
+  border-radius:8px; cursor:pointer;
+  background:#2563eb;color:white;
+}
 
-/* 1.5 Services */
-.services{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.service-card{background:white;padding:14px;border-radius:14px;box-shadow:0 4px 10px rgba(0,0,0,.05);text-align:center;font-size:14px;transition:.3s}
-.service-card:hover{transform:scale(1.03);box-shadow:0 6px 15px rgba(0,0,0,.1);}
+/* ===== SECTIONS ===== */
+section{padding:20px 16px;}
+.section-title{font-size:20px; font-weight:600; margin-bottom:14px;}
 
-/* 1.6 Token Form */
-.token-box{background:white;padding:16px;border-radius:18px;box-shadow:0 8px 20px rgba(0,0,0,.08);}
-.token-box label{display:block;margin-bottom:4px;font-weight:500;}
-.token-box input,.token-box select{width:100%;padding:10px;margin-bottom:10px;border-radius:10px;border:1px solid #ddd;}
+/* ===== SERVICES ===== */
+.services{display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:12px;}
+.service-card{
+  background:white; padding:14px; border-radius:14px;
+  box-shadow:0 4px 10px rgba(0,0,0,.05); text-align:center; font-size:14px;
+  display:flex; flex-direction:column; align-items:center;
+}
+.service-card img{width:40px;margin-bottom:8px;}
+
+/* ===== TOKEN FORM ===== */
+.token-box{
+  background:white; padding:16px; border-radius:18px; box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+.token-box input,.token-box select{
+  width:100%; padding:10px; margin-bottom:10px; border-radius:10px; border:1px solid #ddd;
+}
 .token-box button{width:100%;padding:12px;border:none;border-radius:12px;background:#16a34a;color:white;font-size:16px;}
 
-/* 1.7 Token Display */
-.token-display{margin-top:16px;padding:18px;background:#ecfeff;border-radius:18px;text-align:center;position:relative;overflow:hidden;}
-.ribbon{position:absolute;top:10px;width:200%;height:6px;background:linear-gradient(90deg,#22c55e,#3b82f6,#22c55e);animation:ribbon 4s linear infinite;}
-@keyframes ribbon{from{transform:translateX(-50%)}to{transform:translateX(0)}}
-.token-number{font-size:42px;font-weight:800}
-.token-date{font-size:14px;color:#555}
+/* ===== TOKEN DISPLAY ===== */
+.token-display{
+  margin-top:16px; padding:18px; background:#ecfeff;
+  border-radius:18px; text-align:center; position:relative; overflow:hidden;
+}
+.ribbon{
+  position:absolute; top:10px; width:200%; height:6px;
+  background:linear-gradient(90deg,#22c55e,#3b82f6,#22c55e);
+  animation:ribbon 4s linear infinite;
+}
+@keyframes ribbon{from{transform:translateX(-50%)} to{transform:translateX(0)}}
+.token-number{font-size:42px;font-weight:800;}
+.token-date{font-size:14px;color:#555;}
+.token-info{margin-top:6px;font-size:14px;}
 
-/* 1.8 Feedback */
-.stars span{font-size:28px;cursor:pointer;color:#ccc}
-.stars span.active{color:#facc15}
-textarea{width:100%;padding:10px;border-radius:12px;border:1px solid #ddd;margin-top:10px;}
-.feedback-btn{margin-top:10px;padding:10px;width:100%;border:none;border-radius:12px;background:#2563eb;color:white;}
+/* ===== FEEDBACK ===== */
+.stars span{font-size:28px; cursor:pointer; color:#ccc;}
+.stars span.active{color:#facc15;}
+textarea{width:100%; padding:10px; border-radius:12px; border:1px solid #ddd; margin-top:10px;}
+.feedback-btn{margin-top:10px; padding:10px; width:100%; border:none; border-radius:12px; background:#2563eb; color:white;}
 
-/* 1.9 Dashboard */
-.dashboard{background:white;padding:16px;border-radius:16px;box-shadow:0 6px 16px rgba(0,0,0,.08);}
-.dashboard ul{padding-left:16px}
+/* ===== DASHBOARD ===== */
+.dashboard{background:white; padding:16px; border-radius:16px; box-shadow:0 6px 16px rgba(0,0,0,.08);}
+.dashboard ul{padding-left:16px;}
 .dashboard button{margin-top:10px;padding:10px;width:100%;border:none;border-radius:10px;background:#dc2626;color:white;}
 
-/* 1.10 Scroll-to-top button */
-#scrollTopBtn{position:fixed;bottom:20px;right:20px;padding:10px 14px;border:none;border-radius:50%;background:#16a34a;color:white;cursor:pointer;display:none;z-index:1000;}
+/* ===== PDF HIDDEN TOKEN ===== */
+#pdfToken{display:none;}
+
+/* ===== HEALTH QUOTES ===== */
+#healthQuote{font-style:italic;color:#444;font-size:14px; text-align:center; margin-top:6px;}
+.dark-mode #healthQuote{color:#ddd;}
 </style>
 </head>
 <body>
 
-<!-- 2. WELCOME OVERLAY -->
+<!-- WELCOME -->
 <div id="welcomeOverlay" class="welcome-overlay">
   <h1>WELCOME</h1>
-  <p id="quote">“Health is the real wealth.”</p>
+  <p id="welcomeQuote">“Health is the real wealth.”</p>
 </div>
 
-<!-- 3. HEADER -->
+<!-- HEADER -->
 <header id="header">
   <div class="since">Since 2003</div>
   <div class="clinic-name">COMMUNITY HEALTH CLINIC <span class="plus">+</span></div>
   <div class="address">Cheenimukku, Poonoor</div>
+  <button class="theme-btn" onclick="toggleTheme()">🌙</button>
+  <div id="healthQuote">“Prevention is better than cure.”</div>
 </header>
 
-<!-- 4. SERVICES -->
+<!-- SERVICES -->
 <section>
   <div class="section-title">Services</div>
   <div class="services">
-    <div class="service-card">General OP</div>
-    <div class="service-card">Nebulisation</div>
-    <div class="service-card">ECG</div>
-    <div class="service-card">IV Fluids</div>
-    <div class="service-card">Oxygen</div>
-    <div class="service-card">Minor Procedures</div>
-    <div class="service-card">Wound Management</div>
-    <div class="service-card">Home Sample Collection (on request)</div>
+    <div class="service-card"><img src="https://img.icons8.com/ios-filled/50/16a34a/stethoscope.png"/>General OP</div>
+    <div class="service-card"><img src="https://img.icons8.com/ios-filled/50/16a34a/inhaler.png"/>Nebulisation</div>
+    <div class="service-card"><img src="https://img.icons8.com/ios-filled/50/16a34a/heart-with-pulse.png"/>ECG</div>
+    <div class="service-card"><img src="https://img.icons8.com/ios-filled/50/16a34a/iv-bag.png"/>IV Fluids</div>
+    <div class="service-card"><img src="https://img.icons8.com/ios-filled/50/16a34a/oxygen-tank.png"/>Oxygen</div>
+    <div class="service-card"><img src="https://img.icons8.com/ios-filled/50/16a34a/wound.png"/>Wound Management</div>
+    <div class="service-card"><img src="https://img.icons8.com/ios-filled/50/16a34a/home.png"/>Home Sample Collection</div>
+    <div class="service-card"><img src="https://img.icons8.com/ios-filled/50/16a34a/medical-file.png"/>Minor Procedures</div>
   </div>
 </section>
 
-<!-- 5. TOKEN -->
+<!-- TOKEN -->
 <section>
   <div class="section-title">Take Token (Next Day)</div>
-  <div id="tokensTakenLive" style="margin-bottom:8px;color:#555"></div>
+  <div id="nextDayDate" style="margin-bottom:6px;font-weight:600;"></div>
+  <div id="liveTokenCount" style="margin-bottom:6px;font-size:14px;color:#555;"></div>
   <div class="token-box">
-    <label for="patientName">Patient Name</label>
     <input id="patientName" placeholder="Patient Name">
-    <label for="age">Age</label>
     <input id="age" type="number" placeholder="Age">
-    <label for="sex">Sex</label>
     <select id="sex">
       <option value="">Sex</option>
       <option>Male</option>
       <option>Female</option>
       <option>Other</option>
     </select>
-    <label for="mobile">Mobile Number</label>
     <input id="mobile" placeholder="Mobile Number">
     <button onclick="takeToken()">Take Token</button>
   </div>
-
-  <div id="tokenResult" style="display:none" class="token-display">
+  <div id="tokenResult" class="token-display" style="display:none;">
     <div class="ribbon"></div>
     <div class="token-number" id="tokenNo"></div>
     <div class="token-date" id="tokenDate"></div>
-    <button onclick="downloadPDF()">Download PDF</button>
+    <div class="token-info" id="tokenInfo"></div>
+    <button onclick="downloadToken()">Download PDF</button>
   </div>
 </section>
 
-<!-- 6. FEEDBACK -->
+<!-- FEEDBACK -->
 <section>
   <div class="section-title">Feedback</div>
-  <label for="feedbackType">Public / Private:</label>
-  <select id="feedbackType">
-    <option value="public">Public</option>
-    <option value="private">Private</option>
-  </select>
   <div class="stars" id="stars">
-    <span data-v="1">★</span>
-    <span data-v="2">★</span>
-    <span data-v="3">★</span>
-    <span data-v="4">★</span>
-    <span data-v="5">★</span>
+    <span data-v="1">★</span><span data-v="2">★</span><span data-v="3">★</span><span data-v="4">★</span><span data-v="5">★</span>
   </div>
   <textarea id="fbText" placeholder="Your feedback"></textarea>
   <button class="feedback-btn" onclick="submitFeedback()">Submit</button>
 </section>
 
-<!-- 7. DASHBOARD -->
+<!-- DASHBOARD -->
 <section>
   <div class="section-title">Authorized Access</div>
   <input id="pinInput" type="password" placeholder="Enter PIN">
   <button onclick="checkPin()">Enter</button>
-
-  <div id="dashboard" class="dashboard" style="display:none">
+  <div id="dashboard" class="dashboard" style="display:none;">
     <h4>Tokens</h4>
     <ul id="tokenList"></ul>
     <h4>Feedback</h4>
     <ul id="feedbackList"></ul>
-    <button id="masterBtn" style="display:none" onclick="clearAll()">Edit/Delete Records</button>
+    <button id="masterBtn" style="display:none;" onclick="clearAll()">Delete All Records</button>
   </div>
 </section>
 
-<!-- 8. SCROLL TO TOP -->
-<button id="scrollTopBtn" onclick="scrollTopFunc()">↑</button>
-
-<!-- ===== 9. SCRIPT ===== -->
+<!-- jsPDF library for PDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <script>
-// ===== 9.1 PINS =====
+// ===== PINS =====
 const VIEW_PIN="1234";
 const MASTER_PIN="9999";
 
-// ===== 9.2 Welcome fade + cycling quotes =====
-const quotes = ["“Health is the real wealth.”","“An ounce of prevention is worth a pound of cure.”","“Take care of your body; it’s the only place you have to live.”"];
-let quoteIndex=0;
-const quoteEl=document.getElementById("quote");
+// ===== WELCOME FADE =====
 document.addEventListener("DOMContentLoaded",()=>{
-  setTimeout(()=>{
-    document.getElementById("welcomeOverlay").classList.add("hide");
-    setTimeout(()=>document.getElementById("welcomeOverlay").style.display="none",1000);
+  const welcomeOverlay=document.getElementById("welcomeOverlay");
+  setTimeout(()=>{welcomeOverlay.classList.add("hide");
+    setTimeout(()=>welcomeOverlay.style.display="none",1000);
   },2000);
-  setInterval(()=>{
-    quoteIndex=(quoteIndex+1)%quotes.length;
-    quoteEl.textContent=quotes[quoteIndex];
-  },5000);
+
+  // Show next-day date
+  const nextDay = new Date();
+  nextDay.setDate(nextDay.getDate()+1);
+  document.getElementById("nextDayDate").textContent = "Next Day: "+nextDay.toDateString();
+  updateLiveTokenCount();
 });
 
-// ===== 9.3 Header scroll =====
+// ===== HEADER SCROLL =====
 const header=document.getElementById("header");
-window.addEventListener("scroll",()=>{header.classList.toggle("scrolled",window.scrollY>10)});
-window.addEventListener("scroll",()=>{scrollTopBtn.style.display=window.scrollY>200?"block":"none";});
-function scrollTopFunc(){window.scrollTo({top:0,behavior:'smooth'});}
+window.addEventListener("scroll",()=>{header.classList.toggle("scrolled",window.scrollY>10);});
 
-// ===== 9.4 Tokens =====
+// ===== DARK MODE =====
+function toggleTheme(){
+  document.body.classList.toggle("dark-mode");
+}
+
+// ===== TOKEN STORAGE =====
 let tokens=JSON.parse(localStorage.getItem("tokens")||"[]");
-function updateLiveTokens(){tokensTakenLive.textContent=`Tokens taken: ${tokens.length}`}
-updateLiveTokens();
+function updateLiveTokenCount(){
+  document.getElementById("liveTokenCount").textContent = "Tokens already taken: "+tokens.length;
+}
 
 function takeToken(){
-  const pname = document.getElementById("patientName").value.trim();
-  const ageVal = parseInt(document.getElementById("age").value);
-  const sexVal = document.getElementById("sex").value;
-  const mobileVal = document.getElementById("mobile").value.trim();
-  const now=new Date();
-  if(now.getHours()>=22){alert("Token taking closed after 10 PM");return;}
-  if(!pname || !ageVal || !sexVal || !mobileVal){alert("Fill all details"); return;}
-  if(!/^\d{10}$/.test(mobileVal)){alert("Enter valid 10-digit mobile number");return;}
-  if(ageVal<0 || ageVal>120){alert("Enter valid age");return;}
-  if(tokens.find(t=>t.name.toLowerCase()===pname.toLowerCase()&&t.age===ageVal&&t.sex===sexVal)){alert("Token already taken");return;}
+  const pname=document.getElementById("patientName").value.trim();
+  const ageVal=document.getElementById("age").value;
+  const sexVal=document.getElementById("sex").value;
+  const mobileVal=document.getElementById("mobile").value.trim();
 
-  const no = tokens.length + 1;
-  const d = new Date(); d.setDate(d.getDate()+1);
+  // Check 10 pm
+  const now=new Date();
+  if(now.getHours()>=22){
+    alert("Token cannot be taken after 10 PM");
+    return;
+  }
+
+  if(!pname||!ageVal||!sexVal||!mobileVal){alert("Fill all details"); return;}
+  if(tokens.find(t=>t.name===pname && t.age===ageVal && t.sex===sexVal)){
+    alert("Token already taken"); return;
+  }
+
+  const no=tokens.length+1;
+  const d=new Date(); d.setDate(d.getDate()+1);
 
   tokens.push({no,name:pname,age:ageVal,sex:sexVal,mobile:mobileVal,date:d.toDateString()});
   localStorage.setItem("tokens",JSON.stringify(tokens));
-  tokenNo.textContent="TOKEN "+no;
-  tokenDate.textContent=d.toDateString();
+  updateLiveTokenCount();
+
+  // Display token
+  const tokenResult=document.getElementById("tokenResult");
+  document.getElementById("tokenNo").textContent="TOKEN "+no;
+  document.getElementById("tokenDate").textContent=d.toDateString();
+  document.getElementById("tokenInfo").textContent=`${pname}, ${ageVal}/${sexVal}, ${mobileVal}`;
   tokenResult.style.display="block";
-  updateLiveTokens();
 }
 
-// ===== 9.5 PDF generation =====
-function downloadPDF(){
+// ===== PDF TOKEN =====
+function downloadToken(){
   const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  doc.setFontSize(16);
-  doc.text("Community Health Clinic +",20,20);
-  doc.text("Token: "+tokenNo.textContent,20,40);
-  doc.text("Date: "+tokenDate.textContent,20,50);
-  doc.text("Patient: "+document.getElementById("patientName").value,20,60);
-  doc.text("Age/Sex: "+document.getElementById("age").value+"/"+document.getElementById("sex").value,20,70);
-  doc.text("Mobile: "+document.getElementById("mobile").value,20,80);
-  doc.save("Token_"+tokenNo.textContent+".pdf");
+  const doc = new jsPDF({orientation:"landscape",unit:"px",format:[400,200]});
+  const no=document.getElementById("tokenNo").textContent;
+  const date=document.getElementById("tokenDate").textContent;
+  const info=document.getElementById("tokenInfo").textContent;
+  doc.setFillColor(22,163,74); doc.rect(0,0,400,200,"F");
+  doc.setFontSize(24); doc.setTextColor(255,255,255); doc.text("COMMUNITY HEALTH CLINIC +",10,30);
+  doc.setFontSize(20); doc.text(no,10,70);
+  doc.setFontSize(16); doc.text(date,10,100);
+  doc.setFontSize(16); doc.text(info,10,130);
+  doc.setFontSize(14); doc.text("Cheenimukku, Poonoor",10,160);
+  doc.save(no+".pdf");
 }
 
-// ===== 9.6 Feedback =====
+// ===== FEEDBACK =====
 let rating=0;
 let feedbacks=JSON.parse(localStorage.getItem("feedbacks")||"[]");
+const stars=document.getElementById("stars");
 stars.querySelectorAll("span").forEach(s=>{
   s.onclick=()=>{
     rating=s.dataset.v;
@@ -239,36 +296,60 @@ stars.querySelectorAll("span").forEach(s=>{
 });
 function submitFeedback(){
   if(!rating){alert("Select stars");return;}
-  const type=document.getElementById("feedbackType").value;
-  feedbacks.push({rating,text:fbText.value,type:type,time:new Date().toLocaleString()});
+  feedbacks.push({rating,text:document.getElementById("fbText").value,time:new Date().toLocaleString()});
   localStorage.setItem("feedbacks",JSON.stringify(feedbacks));
   alert("Thank you!");
-  fbText.value="";
+  document.getElementById("fbText").value="";
 }
 
-// ===== 9.7 Dashboard =====
+// ===== DASHBOARD =====
 function checkPin(){
-  if(pinInput.value===VIEW_PIN||pinInput.value===MASTER_PIN){
+  const pin=document.getElementById("pinInput").value;
+  const dashboard=document.getElementById("dashboard");
+  const masterBtn=document.getElementById("masterBtn");
+  if(pin===VIEW_PIN||pin===MASTER_PIN){
     dashboard.style.display="block";
-    masterBtn.style.display=pinInput.value===MASTER_PIN?"block":"none";
+    masterBtn.style.display=pin===MASTER_PIN?"block":"none";
     loadDashboard();
-  }else alert("Invalid PIN");
+  } else alert("Invalid PIN");
 }
+
 function loadDashboard(){
-  tokenList.innerHTML="";
+  const tokenList=document.getElementById("tokenList");
+  const feedbackList=document.getElementById("feedbackList");
+  tokenList.innerHTML=""; feedbackList.innerHTML="";
   tokens.forEach(t=>{
     const li=document.createElement("li");
-    li.textContent=`#${t.no} ${t.name} (${t.age}/${t.sex}) - ${t.mobile} on ${t.date}`;
+    li.textContent=`#${t.no} ${t.name} (${t.age}/${t.sex}) - ${t.mobile} - ${t.date}`;
     tokenList.appendChild(li);
   });
-  feedbackList.innerHTML="";
   feedbacks.forEach(f=>{
     const li=document.createElement("li");
-    li.textContent=`⭐${f.rating} - ${f.text} (${f.type}) (${f.time})`;
+    li.textContent=`⭐${f.rating} - ${f.text} (${f.time})`;
     feedbackList.appendChild(li);
   });
 }
-function clearAll(){if(confirm("Delete all records?")){localStorage.clear();location.reload();}}
+function clearAll(){
+  if(confirm("Delete all records?")){
+    localStorage.clear();
+    location.reload();
+  }
+}
+
+// ===== HEALTH QUOTES =====
+const quotes=[
+  "Health is wealth.",
+  "Prevention is better than cure.",
+  "A healthy mind in a healthy body.",
+  "Take care of your body, it’s the only place you live.",
+  "Healing takes time and patience."
+];
+let qIndex=0;
+setInterval(()=>{
+  qIndex=(qIndex+1)%quotes.length;
+  document.getElementById("healthQuote").textContent=quotes[qIndex];
+  document.getElementById("welcomeQuote").textContent=quotes[qIndex];
+},5000);
 </script>
 
 </body>
