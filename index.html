@@ -202,9 +202,9 @@ textarea{
 <section>
   <div class="section-title">Take Token (Next Day Only)</div>
   <div class="token-box">
-    <input id="name" placeholder="Patient Name">
-    <input id="age" type="number" placeholder="Age">
-    <select id="sex">
+    <input id="Patient Name" placeholder="Patient Name">
+    <input id="Age" type="number" placeholder="Age">
+    <select id="Sex">
       <option value="">Sex</option>
       <option>Male</option>
       <option>Female</option>
@@ -272,7 +272,32 @@ window.addEventListener("scroll",()=>{
 let tokens=JSON.parse(localStorage.getItem("tokens")||"[]");
 
 function takeToken(){
-  if(!name.value||!age.value||!sex.value||!mobile.value){alert("Fill all");return;}
+  const pname = document.getElementById("patientName").value.trim();
+  const ageVal = document.getElementById("age").value;
+  const sexVal = document.getElementById("sex").value;
+  const mobileVal = document.getElementById("mobile").value.trim();
+
+  if(!pname || !ageVal || !sexVal || !mobileVal){
+    alert("Fill all details");
+    return;
+  }
+
+  if(tokens.find(t=>t.name===pname && t.age===ageVal && t.sex===sexVal)){
+    alert("Token already taken");
+    return;
+  }
+
+  const no = tokens.length + 1;
+  const d = new Date();
+  d.setDate(d.getDate()+1);
+
+  tokens.push({no,name:pname,age:ageVal,sex:sexVal,mobile:mobileVal});
+  localStorage.setItem("tokens",JSON.stringify(tokens));
+
+  tokenNo.textContent="TOKEN "+no;
+  tokenDate.textContent=d.toDateString();
+  tokenResult.style.display="block";
+}
   if(tokens.find(t=>t.name==name.value&&t.age==age.value&&t.sex==sex.value)){
     alert("Token already taken");return;
   }
