@@ -299,6 +299,120 @@ function updateOPBadge() {
 updateOPBadge();
 setInterval(updateOPBadge,60000);
 </script>
+<!-- ===== PHASE 2: TOKEN SYSTEM ===== -->
+<style>
+/* ===== TOKEN SYSTEM STYLES ===== */
+.token-container{display:flex;flex-direction:column;align-items:center;justify-content:center;max-width:400px;margin:20px auto;padding:20px}
+.token-box{background:white;padding:20px;border-radius:18px;box-shadow:0 8px 20px rgba(0,0,0,.08);width:100%;transition:.3s}
+body.dark .token-box{background:#1e1e1e;color:#f0f0f0}
+.token-box input,.token-box select{width:100%;padding:10px;margin-bottom:10px;border-radius:10px;border:1px solid #ddd}
+.token-box button{width:100%;padding:12px;border:none;border-radius:12px;background:#16a34a;color:white;font-size:16px;cursor:pointer}
+.token-display{margin-top:16px;padding:18px;background:#ecfeff;border-radius:18px;text-align:center;position:relative;overflow:hidden;min-width:220px;display:none}
+.ribbon{position:absolute;top:10px;width:200%;height:6px;background:linear-gradient(90deg,#22c55e,#3b82f6,#22c55e);animation:ribbon 4s linear infinite}
+@keyframes ribbon{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.token-number{font-size:36px;font-weight:800}
+.token-date{font-size:14px;color:#555}
+.print-btn{margin-top:14px;width:100%;padding:14px;border:none;border-radius:16px;background:linear-gradient(135deg,#16a34a,#22c55e);color:white;font-size:16px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(22,163,74,0.35);transition:transform .2s, box-shadow .2s}
+.print-btn:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(22,163,74,0.45)}
+body.dark .print-btn{background:linear-gradient(135deg,#22c55e,#4ade80)}
+.dashboard{background:white;padding:16px;border-radius:16px;box-shadow:0 6px 16px rgba(0,0,0,.08);display:none;max-width:400px;margin:20px auto}
+body.dark .dashboard{background:#1e1e1e;color:#f0f0f0}
+.dashboard ul{padding-left:16px;max-height:200px;overflow-y:auto}
+.dashboard button{margin-top:10px;padding:10px;width:100%;border:none;border-radius:10px;background:#dc2626;color:white;cursor:pointer}
+    
+/* ===== AUTHORIZED ACCESS ===== */
+.auth-container{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  max-width:400px;
+  margin:20px auto;
+  padding:20px;
+}
+.auth-box{
+  background:white;
+  padding:20px;
+  border-radius:18px;
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+  width:100%;
+  transition:.3s;
+}
+body.dark .auth-box{
+  background:#1e1e1e;
+  color:#f0f0f0;
+}
+.auth-box input, .auth-box button{
+  width:100%;
+  padding:10px;
+  margin-bottom:10px;
+  border-radius:10px;
+  border:1px solid #ddd;
+}
+.auth-box button{
+  background:#16a34a;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+  border:none;
+}
+.dashboard{
+  background:white;
+  padding:16px;
+  border-radius:16px;
+  box-shadow:0 6px 16px rgba(0,0,0,.08);
+  display:none;
+  max-width:400px;
+  margin-top:16px;
+}
+body.dark .dashboard{background:#1e1e1e;color:#f0f0f0}
+.dashboard ul{padding-left:16px;max-height:200px;overflow-y:auto}
+.dashboard button{
+  margin-top:10px;
+  padding:10px;
+  width:100%;
+  border:none;
+  border-radius:10px;
+  background:#dc2626;
+  color:white;
+  cursor:pointer;
+}
+</style>
+    
+<section class="token-container">
+  <div class="section-title">Take Token (<span id="nextDate"></span>)</div>
+  <div class="token-box">
+    <input id="patientName" placeholder="Patient Name">
+    <input id="age" type="number" placeholder="Age">
+    <select id="sex">
+      <option value="">Sex</option>
+      <option>Male</option>
+      <option>Female</option>
+      <option>Other</option>
+    </select>
+    <input id="mobile" placeholder="Mobile Number">
+    <div id="tokenCountDisplay" style="margin-bottom:8px;font-size:14px;color:#555"></div>
+    <button onclick="takeToken()">Take Token</button>
+  </div>
 
+  <div id="tokenResult" class="token-display">
+    <div class="ribbon"></div>
+    <div class="token-number" id="tokenNo"></div>
+    <div class="token-date" id="tokenDate"></div>
+    <button class="print-btn" onclick="printToken()">🖨️ Print Token</button>
+  </div>
+</section>
+<section class="auth-container">
+  <div class="section-title">Authorized Access</div>
+  <div class="auth-box">
+    <input id="pinInput" type="password" placeholder="Enter PIN">
+    <button onclick="checkPin()">Enter</button>
+  </div>
+  <div id="dashboard" class="dashboard">
+    <h4>Tokens</h4>
+    <ul id="tokenList"></ul>
+    <button id="masterBtn" onclick="clearAll()">Delete All Records</button>
+  </div>
+</section>
 </body>
 </html>
