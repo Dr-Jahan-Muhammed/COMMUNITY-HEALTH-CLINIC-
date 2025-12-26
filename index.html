@@ -4,9 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Community Health Clinic</title>
-<!-- ===== GOOGLE FONTS ===== -->
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-<!-- ===== STYLES ===== -->
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Roboto',sans-serif}
 body{background:#f8fafc;color:#222;transition:background .3s,color .3s}
@@ -20,25 +18,8 @@ header.scrolled{background:rgba(255,255,255,.7);backdrop-filter:blur(10px)}
 .address{font-size:13px;color:#666}
 section{padding:20px 16px}
 .section-title{font-size:20px;font-weight:600;margin-bottom:14px;text-align:center}
-.services{
-  display:grid;
-  grid-template-columns:repeat(4, 140px);
-  grid-auto-rows:160px;
-  gap:16px;
-  justify-content:center;
-}
-.service-card{
-  background:white;
-  padding:14px;
-  border-radius:14px;
-  box-shadow:0 4px 10px rgba(0,0,0,.05);
-  text-align:center;
-  font-size:14px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:6px;
-}
+.services{display:grid;grid-template-columns:repeat(4,140px);grid-auto-rows:160px;gap:16px;justify-content:center}
+.service-card{background:white;padding:14px;border-radius:14px;box-shadow:0 4px 10px rgba(0,0,0,.05);text-align:center;font-size:14px;display:flex;flex-direction:column;align-items:center;gap:6px}
 .dark-mode .service-card{background:#222;box-shadow:0 4px 10px rgba(0,0,0,.3);color:#f0f0f0}
 .service-card img{width:40px;height:40px}
 .token-container{display:flex;flex-direction:column;align-items:center;justify-content:center;max-width:400px;margin:0 auto;padding:20px}
@@ -46,7 +27,7 @@ section{padding:20px 16px}
 .dark-mode .token-box{background:#1e1e1e;color:#f0f0f0}
 .token-box input,.token-box select{width:100%;padding:10px;margin-bottom:10px;border-radius:10px;border:1px solid #ddd}
 .token-box button{width:100%;padding:12px;border:none;border-radius:12px;background:#16a34a;color:white;font-size:16px;cursor:pointer}
-.token-display{margin-top:16px;padding:18px;background:#ecfeff;border-radius:18px;text-align:center;position:relative;overflow:hidden;min-width:220px}
+.token-display{margin-top:16px;padding:18px;background:#ecfeff;border-radius:18px;text-align:center;position:relative;overflow:hidden;min-width:220px;display:none}
 .ribbon{position:absolute;top:10px;width:200%;height:6px;background:linear-gradient(90deg,#22c55e,#3b82f6,#22c55e);animation:ribbon 4s linear infinite}
 @keyframes ribbon{from{transform:translateX(-50%)}to{transform:translateX(0)}}
 .token-number{font-size:36px;font-weight:800}
@@ -55,94 +36,36 @@ section{padding:20px 16px}
 .stars span.active{color:#facc15}
 textarea{width:100%;padding:10px;border-radius:12px;border:1px solid #ddd;margin-top:10px}
 .feedback-btn{margin-top:10px;padding:10px;width:100%;border:none;border-radius:12px;background:#2563eb;color:white;cursor:pointer}
-.dashboard{background:white;padding:16px;border-radius:16px;box-shadow:0 6px 16px rgba(0,0,0,.08)}
+.dashboard{background:white;padding:16px;border-radius:16px;box-shadow:0 6px 16px rgba(0,0,0,.08);display:none}
 .dashboard ul{padding-left:16px;max-height:200px;overflow-y:auto}
 .dashboard button{margin-top:10px;padding:10px;width:100%;border:none;border-radius:10px;background:#dc2626;color:white;cursor:pointer}
-/* Welcome overlay */
 .welcome-overlay{position:fixed;inset:0;background:rgba(255,255,255,0.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:5000;opacity:1;transition:opacity 1s ease}
 .welcome-overlay.hide{opacity:0;pointer-events:none}
 .welcome-overlay h1{font-size:42px;margin:0}
 .welcome-overlay p{margin-top:10px;font-style:italic;color:#555}
-/* Dark/Light Toggle */
 .theme-toggle{position:fixed;top:10px;right:10px;padding:8px 14px;background:#16a34a;color:white;border:none;border-radius:8px;cursor:pointer;z-index:2000}
-.print-btn{
-  margin-top:14px;width:100%;padding:14px;border:none;border-radius:16px;
-  background:linear-gradient(135deg,#16a34a,#22c55e);
-  color:white;font-size:16px;font-weight:600;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  box-shadow:0 8px 20px rgba(22,163,74,0.35);
-  transition:transform .2s, box-shadow .2s;
-}
-.print-btn:hover{
-  transform:translateY(-2px);
-  box-shadow:0 12px 26px rgba(22,163,74,0.45);
-}
-.dark-mode .print-btn{
-  background:linear-gradient(135deg,#22c55e,#4ade80);
-}
-@media (max-width:640px){
-  .services{grid-template-columns:repeat(2,140px);grid-auto-rows:160px;}
-}
+.print-btn{margin-top:14px;width:100%;padding:14px;border:none;border-radius:16px;background:linear-gradient(135deg,#16a34a,#22c55e);color:white;font-size:16px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(22,163,74,0.35);transition:transform .2s, box-shadow .2s}
+.print-btn:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(22,163,74,0.45)}
+.dark-mode .print-btn{background:linear-gradient(135deg,#22c55e,#4ade80)}
+@media (max-width:640px){.services{grid-template-columns:repeat(2,140px);grid-auto-rows:160px}}
 </style>
 </head>
 <body>
+
 <!-- WELCOME -->
 <div id="welcomeOverlay" class="welcome-overlay">
   <h1>WELCOME</h1>
   <p id="healthQuote">“Health is the real wealth.”</p>
 </div>
-<style>
-.welcome-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(255,255,255,0.92);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 5000;
-  opacity: 1;
-  transition: opacity 1s ease;
-}
-.welcome-overlay.hide {
-  opacity: 0;
-  pointer-events: none;
-}
-</style>
-<script>
-window.addEventListener('load', () => {
-  const overlay = document.getElementById('welcomeOverlay');
-  // fade out after 2 seconds
-  setTimeout(() => {
-    overlay.classList.add('hide');
-    // remove from DOM after fade
-    setTimeout(() => {
-      overlay.remove();
-    }, 1000); // 1s fade duration
-  }, 2000); // wait 2 seconds before fading
-});
-</script>
-window.addEventListener('load', () => {
-  const overlay = document.getElementById('welcomeOverlay');
-  // fade out after 2 seconds
-  setTimeout(() => {
-    overlay.classList.add('hide');
-    // remove from DOM after fade
-    setTimeout(() => {
-      overlay.remove();
-    }, 1000); // 1s fade duration
-  }, 2000); // wait 2 seconds before fading
-});
-</script>
-<!-- THEME TOGGLE -->
+
 <button class="theme-toggle" onclick="toggleTheme()">Dark/Light</button>
-<!-- HEADER -->
+
 <header id="header">
   <div class="since">Since 2003</div>
   <div class="clinic-name">COMMUNITY HEALTH CLINIC <span class="plus">+</span></div>
   <div class="address">Cheenimukku, Poonoor</div>
 </header>
-<!-- SERVICES -->
+
 <section>
   <div class="section-title">Services</div>
   <div class="services">
@@ -156,7 +79,7 @@ window.addEventListener('load', () => {
     <div class="service-card"><img src="https://img.icons8.com/color/48/000000/test-tube.png"/><span>Home Sample Collection</span></div>
   </div>
 </section>
-<!-- TOKEN -->
+
 <section class="token-container">
   <div class="section-title">Take Token (<span id="nextDate"></span>)</div>
   <div class="token-box">
@@ -172,14 +95,14 @@ window.addEventListener('load', () => {
     <div id="tokenCountDisplay" style="margin-bottom:8px;font-size:14px;color:#555"></div>
     <button onclick="takeToken()">Take Token</button>
   </div>
-  <div id="tokenResult" class="token-display" style="display:none">
+  <div id="tokenResult" class="token-display">
     <div class="ribbon"></div>
     <div class="token-number" id="tokenNo"></div>
     <div class="token-date" id="tokenDate"></div>
     <button class="print-btn" onclick="printToken()">🖨️ Print Token</button>
   </div>
 </section>
-<!-- FEEDBACK -->
+
 <section>
   <div class="section-title">Feedback</div>
   <div class="stars" id="stars">
@@ -192,143 +115,76 @@ window.addEventListener('load', () => {
   <textarea id="fbText" placeholder="Your feedback"></textarea>
   <button class="feedback-btn" onclick="submitFeedback()">Submit</button>
 </section>
-<!-- DASHBOARD -->
+
 <section>
   <div class="section-title">Authorized Access</div>
   <input id="pinInput" type="password" placeholder="Enter PIN">
   <button onclick="checkPin()">Enter</button>
-  <div id="dashboard" class="dashboard" style="display:none">
+  <div id="dashboard" class="dashboard">
     <h4>Tokens</h4>
     <ul id="tokenList"></ul>
     <h4>Feedback</h4>
     <ul id="feedbackList"></ul>
-    <button id="masterBtn" style="display:none" onclick="clearAll()">Delete All Records</button>
+    <button id="masterBtn" onclick="clearAll()">Delete All Records</button>
   </div>
 </section>
-<!-- ===== SCRIPTS ===== -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <script>
-/* SETTINGS */
-const VIEW_PIN="1234";
-const MASTER_PIN="9999";
-/* WELCOME OVERLAY & QUOTE */
-const welcomeOverlay = document.getElementById("welcomeOverlay");
+const VIEW_PIN="1234", MASTER_PIN="9999";
+const welcomeOverlay=document.getElementById("welcomeOverlay");
 const quotes=["Health is the real wealth.","An ounce of prevention is worth a pound of cure.","Take care of your body, it's the only place you live.","Healthy mind, healthy body."];
 let qIndex=0;
-function rotateQuotes(){
-  document.getElementById("healthQuote").textContent=quotes[qIndex];
-  qIndex=(qIndex+1)%quotes.length;
-}
+function rotateQuotes(){document.getElementById("healthQuote").textContent=quotes[qIndex];qIndex=(qIndex+1)%quotes.length;}
 setInterval(rotateQuotes,4000);
-// fade out welcome overlay
-setTimeout(() => {
-  welcomeOverlay.classList.add("hide");
-  setTimeout(()=>{welcomeOverlay.style.display="none";},1000);
-},2000);
-/* HEADER SCROLL */
-const header=document.getElementById("header");
-window.addEventListener("scroll",()=>{header.classList.toggle("scrolled",window.scrollY>10)});
-/* TOKEN */
+window.addEventListener("load",()=>{setTimeout(()=>{welcomeOverlay.classList.add("hide");setTimeout(()=>{welcomeOverlay.style.display="none"},1000)},2000)});
+const header=document.getElementById("header");window.addEventListener("scroll",()=>{header.classList.toggle("scrolled",window.scrollY>10)});
 let tokens=JSON.parse(localStorage.getItem("tokens")||"[]");
-let nextDate=new Date(); nextDate.setDate(nextDate.getDate()+1);
-document.getElementById("nextDate").textContent=nextDate.toDateString();
+let feedbacks=JSON.parse(localStorage.getItem("feedbacks")||"[]");
+let rating=0;
+let nextDate=new Date();nextDate.setDate(nextDate.getDate()+1);document.getElementById("nextDate").textContent=nextDate.toDateString();
 function updateTokenCount(){document.getElementById("tokenCountDisplay").textContent=`Tokens taken: ${tokens.length}`;}
 updateTokenCount();
 function takeToken(){
-  const pname=document.getElementById("patientName").value.trim();
-  const ageVal=document.getElementById("age").value;
-  const sexVal=document.getElementById("sex").value;
-  const mobileVal=document.getElementById("mobile").value.trim();
-  const hourNow=new Date().getHours();
-  if(hourNow>=22){alert("Token submissions closed after 10 PM");return;}
+  const pname=document.getElementById("patientName").value.trim(), ageVal=document.getElementById("age").value, sexVal=document.getElementById("sex").value, mobileVal=document.getElementById("mobile").value.trim();
   if(!pname||!ageVal||!sexVal||!mobileVal){alert("Fill all details");return;}
-  if(tokens.find(t=>t.name===pname&&t.age===ageVal&&t.sex===sexVal)){alert("Token already taken");return;}
-  const no=tokens.length+1;
-  tokens.push({no,name:pname,age:ageVal,sex:sexVal,mobile:mobileVal,date:nextDate.toDateString()});
+  if(tokens.find(t=>t.name===pname&&t.age==ageVal&&t.sex===sexVal)){alert("Token already taken");return;}
+  const no=tokens.length+1; tokens.push({no,name:pname,age:ageVal,sex:sexVal,mobile:mobileVal,date:nextDate.toDateString()});
   localStorage.setItem("tokens",JSON.stringify(tokens));
   document.getElementById("tokenNo").textContent="TOKEN "+no;
   document.getElementById("tokenDate").textContent=nextDate.toDateString();
   document.getElementById("tokenResult").style.display="block";
   updateTokenCount();
 }
-/* PRINT TOKEN */
 function printToken(){
-  const t=tokens[tokens.length-1];
-  if(!t){alert("No token found");return;}
-  const printWindow=window.open("","", "width=380,height=600");
-  printWindow.document.write(`
-    <html>
-    <head><title>Clinic Token</title>
-    <style>
-      body{font-family:Arial,sans-serif;padding:20px;text-align:center;}
-      .ticket{border:2px dashed #16a34a;border-radius:18px;padding:20px;}
-      h2{margin:0;color:#16a34a;}
-      .token-no{font-size:42px;font-weight:800;margin:14px 0;}
-      .line{margin:6px 0;font-size:14px;}
-      .footer{margin-top:14px;font-size:12px;color:#555;}
-    </style></head>
-    <body>
-      <div class="ticket">
-        <h2>COMMUNITY HEALTH CLINIC +</h2>
-        <div class="line">Cheenimukku, Poonoor</div>
-        <div class="line"><strong>Date:</strong> ${t.date}</div>
-        <div class="token-no">TOKEN ${t.no}</div>
-        <div class="line"><strong>${t.name}</strong></div>
-        <div class="line">Age: ${t.age} | Sex: ${t.sex}</div>
-        <div class="line">Mobile: ${t.mobile}</div>
-        <div class="footer">Please wait for your turn.<br>Emergency cases will be prioritised.</div>
-      </div>
-      <script>window.onload=()=>window.print();</script>
-    </body></html>
-  `);
+  const t=tokens[tokens.length-1]; if(!t){alert("No token found");return;}
+  const printWindow=window.open("","width=380,height=600");
+  printWindow.document.write(`<html><head><title>Clinic Token</title><style>
+    body{font-family:Arial,sans-serif;padding:20px;text-align:center;}
+    .ticket{border:2px dashed #16a34a;border-radius:18px;padding:20px;}
+    h2{margin:0;color:#16a34a;}
+    .token-no{font-size:42px;font-weight:800;margin:14px 0;}
+    .line{margin:6px 0;font-size:14px;}
+    .footer{margin-top:14px;font-size:12px;color:#555;}
+  </style></head><body><div class="ticket">
+  <h2>COMMUNITY HEALTH CLINIC +</h2>
+  <div class="line">Cheenimukku, Poonoor</div>
+  <div class="line"><strong>Date:</strong> ${t.date}</div>
+  <div class="token-no">TOKEN ${t.no}</div>
+  <div class="line"><strong>${t.name}</strong></div>
+  <div class="line">Age: ${t.age} | Sex: ${t.sex}</div>
+  <div class="line">Mobile: ${t.mobile}</div>
+  <div class="footer">Please wait for your turn.<br>Emergency cases will be prioritised.</div>
+  </div><script>window.onload=()=>window.print();</script></body></html>`);
   printWindow.document.close();
 }
-/* FEEDBACK */
-let rating=0;
-let feedbacks=JSON.parse(localStorage.getItem("feedbacks")||"[]");
-document.querySelectorAll("#stars span").forEach(s=>{
-  s.onclick=()=>{
-    rating=s.dataset.v;
-    document.querySelectorAll("#stars span").forEach(x=>x.classList.toggle("active",x.dataset.v<=rating));
-  };
-});
-function submitFeedback(){
-  if(!rating){alert("Select stars");return;}
-  feedbacks.push({rating,text:fbText.value,time:new Date().toLocaleString()});
-  localStorage.setItem("feedbacks",JSON.stringify(feedbacks));
-  alert("Thank you!"); fbText.value=""; rating=0;
-  document.querySelectorAll("#stars span").forEach(s=>s.classList.remove("active"));
-}
-/* DASHBOARD */
-const dashboard=document.getElementById("dashboard");
-const pinInput=document.getElementById("pinInput");
-const masterBtn=document.getElementById("masterBtn");
-const tokenList=document.getElementById("tokenList");
-const feedbackList=document.getElementById("feedbackList");
-function checkPin(){
-  if(pinInput.value===VIEW_PIN||pinInput.value===MASTER_PIN){
-    dashboard.style.display="block";
-    masterBtn.style.display=pinInput.value===MASTER_PIN?"block":"none";
-    loadDashboard();
-  } else alert("Invalid PIN");
-}
-function loadDashboard(){
-  tokenList.innerHTML="";
-  tokens.forEach(t=>{
-    const li=document.createElement("li");
-    li.textContent=`#${t.no} ${t.name} (${t.age}/${t.sex}) - ${t.mobile} - ${t.date}`;
-    tokenList.appendChild(li);
-  });
-  feedbackList.innerHTML="";
-  feedbacks.forEach(f=>{
-    const li=document.createElement("li");
-    li.textContent=`⭐${f.rating} - ${f.text} (${f.time})`;
-    feedbackList.appendChild(li);
-  });
-}
+document.querySelectorAll("#stars span").forEach(s=>{s.onclick=()=>{rating=s.dataset.v;document.querySelectorAll("#stars span").forEach(x=>x.classList.toggle("active",x.dataset.v<=rating));}});
+function submitFeedback(){if(!rating){alert("Select stars");return;}feedbacks.push({rating,text:fbText.value,time:new Date().toLocaleString()});localStorage.setItem("feedbacks",JSON.stringify(feedbacks));alert("Thank you!");fbText.value="";rating=0;document.querySelectorAll("#stars span").forEach(s=>s.classList.remove("active"));}
+const dashboard=document.getElementById("dashboard"), pinInput=document.getElementById("pinInput"), masterBtn=document.getElementById("masterBtn"), tokenList=document.getElementById("tokenList"), feedbackList=document.getElementById("feedbackList");
+function checkPin(){if(pinInput.value===VIEW_PIN||pinInput.value===MASTER_PIN){dashboard.style.display="block";masterBtn.style.display=pinInput.value===MASTER_PIN?"block":"none";loadDashboard();}else alert("Invalid PIN");}
+function loadDashboard(){tokenList.innerHTML="";tokens.forEach(t=>{const li=document.createElement("li");li.textContent=`#${t.no} ${t.name} (${t.age}/${t.sex}) - ${t.mobile} - ${t.date}`;tokenList.appendChild(li);});feedbackList.innerHTML="";feedbacks.forEach(f=>{const li=document.createElement("li");li.textContent=`⭐${f.rating} - ${f.text} (${f.time})`;feedbackList.appendChild(li);});}
 function clearAll(){if(confirm("Delete all records?")){localStorage.clear();location.reload();}}
-/* THEME */
 function toggleTheme(){document.body.classList.toggle("dark-mode");}
 </script>
+
 </body>
 </html>
