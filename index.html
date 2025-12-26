@@ -1,156 +1,296 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Community Health Clinic</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Roboto', sans-serif; }
-    body { background:#f8fafc; color:#222; transition: background .3s, color .3s; }
-    body.dark { background:#121212; color:#f0f0f0; }/* 1️⃣ WELCOME OVERLAY */
-.welcome {
-  position: fixed; inset: 0;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  background: rgba(255,255,255,0.94);
-  z-index: 5000;
-  transition: opacity .6s ease, transform .6s ease;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Community Health Clinic</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Roboto',sans-serif}
+body{background:#f8fafc;color:#222;transition:.3s;position:relative}
+body.dark{background:#121212;color:#f1f1f1}
+
+/* ===== SIDEBAR ===== */
+#sidebar{
+  position:fixed;
+  left:0; top:50%;
+  transform:translateY(-50%);
+  width:50px;
+  background:rgba(255,255,255,.95);
+  border-radius:0 12px 12px 0;
+  box-shadow:2px 0 6px rgba(0,0,0,.1);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:8px 0;
+  z-index:2000;
 }
-body.dark .welcome { background: rgba(18,18,18,0.96); }
-.welcome.hidden { opacity: 0; pointer-events: none; }
-.welcome h1 { font-size: 42px; }
-.welcome p { margin-top: 10px; font-style: italic; color: #555; }
-body.dark .welcome p { color:#aaa; }
-
-/* 2️⃣ HEADER */
-header {
-  position: sticky; top: 0; z-index: 1000;
-  background: white; padding: 14px; text-align: center;
-  transition: background .3s, box-shadow .3s;
+body.dark #sidebar{background:rgba(30,30,30,.95)}
+.sidebar-btn{
+  width:40px; height:40px;
+  margin:8px 0;
+  border-radius:12px;
+  background:#16a34a;
+  display:flex; justify-content:center; align-items:center;
+  color:white; font-size:12px;
+  cursor:pointer;
+  writing-mode:vertical-rl;
+  text-orientation:mixed;
+  text-align:center;
 }
-header.scrolled { background: rgba(255,255,255,0.75); backdrop-filter: blur(10px); box-shadow: 0 2px 10px rgba(0,0,0,.08); }
-body.dark header { background:#1e1e1e; }
-body.dark header.scrolled { background: rgba(30,30,30,.8); }
-
-.since { font-size: 12px; color:#777; }
-
-body.dark .since { color:#ccc; } .clinic { font-size: 22px; font-weight: 700; display:flex; align-items:center; justify-content:center; gap:8px; } .plus { color:#facc15; } .address { font-size: 13px; color:#666; } body.dark .address { color:#d1d5db; } .contact { font-size: 14px; margin-top: 4px; } .badge { display:inline-block; margin-top:6px; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600; } .open { background:#16a34a; color:white; } .closed { background:#dc2626; color:white; }
-
-.theme-btn {
-  position: fixed; top: 10px; right: 10px; z-index: 2000;
-  width: 44px; height: 44px; border: none; border-radius: 50%;
-  background: #facc15; color: #111;
-  cursor: pointer; font-size: 20px;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 6px 16px rgba(0,0,0,.25);
-  transition: transform .3s, background .3s;
-}
-body.dark .theme-btn { background:#1f2937; color:#facc15; }
-.theme-btn:hover { transform: rotate(20deg); }
-
-section { padding: 22px 16px; }
-.section-title { font-size: 20px; font-weight: 600; margin-bottom: 14px; text-align: center; }
-
-/* 3️⃣ SERVICES (UNCHANGED GRID) */
-.services {
-  display: grid; grid-template-columns: repeat(4, 140px);
-  grid-auto-rows: 160px; gap: 16px; justify-content: center;
-}
-.service {
-  background: white; border-radius: 14px; padding: 14px;
-  text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,.05);
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-}
-body.dark .service { background:#222; color:#f0f0f0; box-shadow:0 4px 12px rgba(0,0,0,.4); }
-.service img { width: 40px; height: 40px; }
-
-@media (max-width: 640px) {
-  .services { grid-template-columns: repeat(2, 140px); }
+.sidebar-btn.current{background:#2563eb}
+.sidebar-btn:hover{transform:scale(1.1)}
+.sidebar-theme{
+  margin-top:8px;
+  width:28px; height:28px;
+  border-radius:50%;
+  border:none;
+  background:#facc15;
+  color:#111;
+  display:flex; justify-content:center; align-items:center;
+  cursor:pointer;
+  font-size:14px;
 }
 
-/* PLACEHOLDERS FOR NEXT PHASES */
-.info-strip, .token-box, .feedback { max-width: 420px; margin: 0 auto; }
+/* ===== MAIN ===== */
+#main{
+  margin-left:0;
+  padding:0 16px;
+}
 
-  </style>
+/* ===== WELCOME ===== */
+#welcome{
+  position:fixed; inset:0;
+  background:rgba(255,255,255,.95);
+  display:flex; flex-direction:column;
+  justify-content:center; align-items:center;
+  z-index:9999;
+  animation:fadeOut 1.2s ease forwards;
+  animation-delay:2.5s;
+}
+@keyframes fadeOut{
+  to{opacity:0;transform:translateY(-20px);pointer-events:none}
+}
+#welcome h1{font-size:42px}
+#welcome p{margin-top:10px;font-style:italic;color:#555}
+
+/* ===== HEADER ===== */
+header{
+  position:sticky;top:0;
+  background:#fff;
+  padding:14px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  z-index:1000;
+  transition:.3s;
+}
+header.scrolled{
+  background:rgba(255,255,255,.7);
+  backdrop-filter:blur(10px);
+}
+body.dark header{background:#1e1e1e}
+
+.since{font-size:12px;color:#777}
+body.dark .since{color:#aaa}
+
+.clinic-name{
+  font-size:22px;font-weight:700;
+  display:flex;align-items:center;
+  justify-content:center;
+  white-space:nowrap;
+}
+.clinic-name img{
+  height:1.1em;
+  width:auto;
+  margin-left:6px;
+}
+
+.address{font-size:13px;color:#666;margin-top:2px}
+body.dark .address{color:#bbb}
+
+.contact{font-size:13px;margin-top:2px;color:#2563eb}
+
+/* ===== OP BADGE ===== */
+.op-badge{
+  margin-top:6px;padding:4px 8px;border-radius:12px;font-size:12px;font-weight:600;color:white;
+}
+
+/* ===== ROTATING QUOTES ===== */
+#rotating-quote{
+  text-align:center;
+  font-style:italic;
+  font-size:16px;
+  margin:16px 0;
+  color:#16a34a;
+  transition:.3s;
+}
+body.dark #rotating-quote{color:#facc15}
+
+/* ===== SECTIONS ===== */
+section{padding:20px 16px}
+.section-title{text-align:center;font-size:20px;font-weight:600;margin-bottom:14px}
+
+/* ===== SERVICES ===== */
+.services{
+  display:grid;
+  grid-template-columns:repeat(4,140px);
+  gap:16px;
+  justify-content:center;
+}
+.service-card{
+  background:#fff;
+  padding:14px;border-radius:14px;
+  box-shadow:0 4px 10px rgba(0,0,0,.05);
+  text-align:center;font-size:14px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+body.dark .service-card{background:#222;color:#eee}
+.service-card img{width:40px;height:40px;margin-bottom:6px}
+
+/* ===== MOBILE ===== */
+@media(max-width:640px){
+  .services{grid-template-columns:repeat(2,140px)}
+  #sidebar{width:40px}
+}
+</style>
 </head>
-<body>  <!-- 1️⃣ WELCOME -->  <div id="welcome" class="welcome" style="pointer-events:none;">
-    <h1>WELCOME</h1>
-    <p id="quote">“Health is the real wealth.”</p>
-  </div><button class="theme-btn" onclick="toggleTheme()" id="themeToggle">☀️</button>
 
-  <!-- 2️⃣ HEADER -->  <header id="header">
-    <div class="since">Since 2003</div>
-    <div class="clinic">COMMUNITY HEALTH CLINIC <img src="https://img.icons8.com/color/48/iv-bag.png" alt="Clinic emblem" style="width:20px;height:20px;filter:hue-rotate(45deg) saturate(1.4);"></div>
-    <div class="address">Cheenimukku, Poonoor</div>
-    <div class="contact">📞 9961252798</div>
-    <div id="opBadge" class="badge">Checking OP…</div>
-  </header>  <!-- 3️⃣ SERVICES -->  <!-- SIDE BOOKMARK PLACEHOLDER --><div style="position:fixed;left:6px;top:40%;z-index:1500;display:flex;flex-direction:column;gap:10px;">
-  <div style="writing-mode:vertical-rl;transform:rotate(180deg);background:#16a34a;color:white;padding:10px 6px;border-radius:10px;font-size:12px;font-weight:600;">Community Health Clinic</div>
-  <div style="writing-mode:vertical-rl;transform:rotate(180deg);background:#e5e7eb;color:#555;padding:10px 6px;border-radius:10px;font-size:12px;opacity:.6;">(Future)</div>
-</div><section>
-    <div class="section-title">Services</div>
-    <div class="services">
-      <div class="service"><img src="https://img.icons8.com/color/48/stethoscope.png"><span>General OP</span></div>
-      <div class="service"><img src="https://img.icons8.com/color/48/lungs.png"><span>Nebulisation</span></div>
-      <div class="service"><img src="https://img.icons8.com/color/48/heart-with-pulse.png"><span>ECG</span></div>
-      <div class="service"><img src="https://img.icons8.com/color/48/iv-bag.png"><span>IV Fluids</span></div>
-      <div class="service"><img src="https://img.icons8.com/color/48/oxygen.png"><span>Oxygen</span></div>
-      <div class="service"><img src="https://img.icons8.com/color/48/wound.png"><span>Wound Care</span></div>
-      <div class="service"><img src="https://img.icons8.com/color/48/surgical-scissors.png"><span>Minor Procedures</span></div>
-      <div class="service"><img src="https://img.icons8.com/color/48/test-tube.png"><span>Home Sample Collection</span></div>
+<body>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div class="sidebar-btn current" title="Community Health Clinic">CHC</div>
+  <!-- Theme toggle below CHC -->
+  <button class="sidebar-theme" id="themeToggle">☀️</button>
+  <div style="height:40px;margin:8px 0"></div> <!-- empty space for future pages -->
+</div>
+
+<!-- MAIN -->
+<div id="main">
+
+<!-- WELCOME -->
+<div id="welcome">
+  <h1>WELCOME</h1>
+  <p id="quote">Health is the real wealth.</p>
+</div>
+
+<header id="header">
+  <div class="since">Since 2003</div>
+  <div class="clinic-name">
+    COMMUNITY HEALTH CLINIC
+    <!-- Original IV fluids icon restored for clinic -->
+    <img src="https://cdn-icons-png.flaticon.com/512/4006/4006511.png" alt="Clinic Icon" style="height:1.1em; width:auto; margin-left:6px;">
+  </div>
+  <div class="address">Cheenimukku, Poonoor</div>
+  <div class="contact">📞 9961252798</div>
+  <span id="opBadge" class="op-badge">OPEN</span>
+</header>
+
+<!-- ROTATING QUOTE -->
+<div id="rotating-quote">“Health is the real wealth.”</div>
+
+<section>
+  <div class="section-title">Services</div>
+  <div class="services">
+    <div class="service-card">
+      <img src="https://img.icons8.com/color/48/000000/stethoscope.png">
+      General OP
     </div>
-  </section><script>
-  /* WELCOME SCROLL FADE + QUOTES */
-  const welcome = document.getElementById('welcome');
-  const quotes = [
-    'Health is the real wealth.',
-    'An ounce of prevention is worth a pound of cure.',
-    'Healthy mind, healthy body.',
-    'Your health is an investment, not an expense.'
-  ];
-  let qi = 0;
-  setInterval(() => {
-    document.getElementById('quote').textContent = '“' + quotes[qi] + '”';
-    qi = (qi + 1) % quotes.length;
-  }, 4000);
+    <div class="service-card">
+      <img src="https://img.icons8.com/color/48/000000/lungs.png">
+      Nebulisation
+    </div>
+    <div class="service-card">
+      <img src="https://img.icons8.com/color/48/000000/heart-with-pulse.png">
+      ECG
+    </div>
+    <div class="service-card">
+      <!-- IV Fluids icon restored -->
+      <img src="https://cdn-icons-png.flaticon.com/512/4006/4006511.png">
+      IV Fluids
+    </div>
+    <div class="service-card">
+      <img src="https://img.icons8.com/color/48/000000/oxygen.png">
+      Oxygen
+    </div>
+    <div class="service-card">
+      <img src="https://img.icons8.com/color/48/000000/wound.png">
+      Wound Care
+    </div>
+    <div class="service-card">
+      <img src="https://img.icons8.com/color/48/000000/surgical-scissors.png">
+      Minor Procedures
+    </div>
+    <div class="service-card">
+      <img src="https://img.icons8.com/color/48/000000/test-tube.png">
+      Lab Collection
+    </div>
+    <div class="service-card">
+      <img src="https://img.icons8.com/color/48/000000/home.png">
+      Home Visit
+    </div>
+  </div>
+</section>
 
-  let welcomeGone = false;
+</div> <!-- MAIN END -->
 
-  function hideWelcome() {
-    if (welcomeGone) return;
-    welcomeGone = true;
-    welcome.classList.add('hidden');
-    setTimeout(() => welcome.style.display = 'none', 600);
-  }
+<script>
+/* ===== ROTATING QUOTES ===== */
+const quotes=[
+ "The greatest wealth is health. – Hippocrates",
+ "An ounce of prevention is worth a pound of cure. – Benjamin Franklin",
+ "It is health that is real wealth and not pieces of gold and silver. – Mahatma Gandhi",
+ "To keep the body in good health is a duty… otherwise we shall not be able to keep our mind strong and clear. – Buddha",
+ "A healthy outside starts from the inside. – Robert Urich",
+ "The doctor of the future will give no medicine but will interest his patients in the care of the human frame, diet and in the cause and prevention of disease. – Thomas Edison",
+ "Health is a state of complete harmony of the body, mind, and spirit. – B.K.S. Iyengar",
+ "The art of medicine consists of amusing the patient while nature cures the disease. – Voltaire"
+];
+let i=0;
+const quoteEl=document.getElementById("rotating-quote");
+setInterval(()=>{
+ quoteEl.textContent = quotes[i];
+ i=(i+1)%quotes.length;
+},4000);
 
-  // Auto-hide after 2.5 seconds (desktop & mobile)
-  setTimeout(hideWelcome, 2500);
+/* ===== HEADER SCROLL EFFECT ===== */
+const header=document.getElementById("header");
+window.addEventListener("scroll",()=>header.classList.toggle("scrolled",scrollY>10));
 
-  // Scroll-based fade (if user scrolls earlier)
-  window.addEventListener('scroll', () => {
-    const y = window.scrollY;
-    welcome.style.transform = `translateY(${y * -0.2}px)`;
-    welcome.style.opacity = Math.max(0, 1 - y / 200);
-    if (y > 120) hideWelcome();
-  });
+/* ===== THEME TOGGLE ===== */
+const themeBtn = document.getElementById("themeToggle");
+themeBtn.addEventListener("click",()=>{
+ document.body.classList.toggle("dark");
+ if(document.body.classList.contains("dark")){
+   themeBtn.textContent = "🌙";
+   themeBtn.style.background = "#333";
+   themeBtn.style.color = "#facc15";
+ } else {
+   themeBtn.textContent = "☀️";
+   themeBtn.style.background = "#facc15";
+   themeBtn.style.color = "#111";
+ }
+});
 
-  /* HEADER SCROLL */
-  const header = document.getElementById('header');
-  window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 10));
-
-  /* OP BADGE (LOGIC WIRED, VISUAL ONLY IN PHASE 1) */
-  const badge = document.getElementById('opBadge');
+/* ===== OP BADGE ===== */
+function updateOPBadge() {
+  const badge = document.getElementById("opBadge");
   const now = new Date();
-  const day = now.getDay();
+  const day = now.getDay(); // 0=Sun
   const hour = now.getHours();
-  const open = (day >= 1 && day <= 6 && hour >= 9 && hour < 23) || (day === 0 && hour >= 9 && hour < 20);
-  badge.textContent = open ? 'OPEN' : 'CLOSED';
-  badge.className = 'badge ' + (open ? 'open' : 'closed');
+  let isOpen = false;
+  if(day===0 && hour>=9 && hour<20) isOpen=true;
+  else if(day>=1 && day<=6 && hour>=9 && hour<23) isOpen=true;
+  badge.textContent = isOpen ? "OPEN" : "CLOSED";
+  badge.style.backgroundColor = isOpen ? "#16a34a" : "#dc2626"; // green/red
+}
+updateOPBadge();
+setInterval(updateOPBadge,60000);
+</script>
 
-  /* THEME */
-  function toggleTheme() {
-    document.body.classList.toggle('dark');
-    const btn = document.getElementById('themeToggle');
-    btn.textContent = document.body.classList.contains('dark') ? '🌙' : '☀️';
-  }
-</script></body>
+</body>
 </html>
