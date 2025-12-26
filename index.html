@@ -414,5 +414,249 @@ body.dark .dashboard{background:#1e1e1e;color:#f0f0f0}
     <button id="masterBtn" onclick="clearAll()">Delete All Records</button>
   </div>
 </section>
+<script>
+/* ============================
+   PHASE 2 – TOKEN SYSTEM
+   ============================ */
+
+const MAX_TOKENS_PER_DAY = 50;
+const AUTH_PIN = "1234"; // change later
+
+/* ---------- DATE LOGIC ---------- */
+function getNextOPDate() {
+  const now = new Date();
+  const hour = now.getHours();
+  const day = now.getDay(); // 0 = Sunday
+
+  let target = new Date(now);
+
+  // After 10 PM → next day
+  if (hour >= 22) {
+    target.setDate(target.getDate() + 1);
+  }
+
+  // If Sunday before 9 AM → same day
+  // If Sunday after 8 PM → Monday
+  if (target.getDay() === 0 && hour >= 20) {
+    target.setDate(target.getDate() + 1);
+  }
+
+  return target.toISOString().split("T")[0];
+}
+
+const todayKey = getNextOPDate();
+
+/* ---------- STORAGE ---------- */
+function getTokens() {
+  return JSON.parse(localStorage.getItem("tokens_" + todayKey)) || [];
+}
+
+function saveTokens(tokens) {
+  localStorage.setItem("tokens_" + todayKey, JSON.stringify(tokens));
+}
+
+/* ---------- UI UPDATE ---------- */
+function updateTokenCount() {
+  const count = getTokens().length;
+  document.getElementById("tokenCountDisplay").textContent =
+    `Tokens issued: ${count}/${MAX_TOKENS_PER_DAY}`;
+}
+
+document.getElementById("nextDate").textContent = todayKey;
+updateTokenCount();
+
+/* ---------- TAKE TOKEN ---------- */
+function takeToken() {
+  const name = patientName.value.trim();
+  const age = age.value.trim();
+  const sex = sex.value;
+  const mobile = mobile.value.trim();
+
+  if (!name || !age || !sex || !mobile) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  let tokens = getTokens();
+
+  if (tokens.length >= MAX_TOKENS_PER_DAY) {
+    alert("Token limit reached");
+    return;
+  }
+
+  const tokenNo = tokens.length + 1;
+
+  const tokenData = {
+    tokenNo,
+    name,
+    age,
+    sex,
+    mobile,
+    date: todayKey
+  };
+
+  tokens.push(tokenData);
+  saveTokens(tokens);
+
+  document.getElementById("tokenNo").textContent = "TOKEN " + tokenNo;
+  document.getElementById("tokenDate").textContent = "Date: " + todayKey;
+  document.getElementById("tokenResult").style.display = "block";
+
+  updateTokenCount();
+}
+
+/* ---------- PRINT ---------- */
+function printToken() {
+  const printContent = document.getElementById("tokenResult").innerHTML;
+  const win = window.open("", "", "width=300,height=400");
+  win.document.write(`<html><body>${printContent}</body></html>`);
+  win.print();
+  win.close();
+}
+
+/* ============================
+   AUTHORIZED ACCESS
+   ============================ */
+
+function checkPin() {
+  const pin = document.getElementById("pinInput").value;
+
+  if (pin !== AUTH_PIN) {
+    alert("Incorrect PIN");
+    return;
+  }
+
+  document.getElementById("dashboard").style.display = "block";
+  loadDashboard();
+}
+
+/* ---------- DASHBOARD ---------- */
+function loadDashboard() {
+  const list = document.getElementById("tokenList");
+  list.innerHTML = "";
+
+  const tokens = getTokens();
+
+  if (tokens.length === 0) {
+    list.innerHTML = "<li>No tokens</li>";
+    return;
+  }
+
+  tokens.forEach(t => {
+    const li = document.createElement("li");
+    li.textContent = `#${t.tokenNo} - ${t.name} (${t.age}, ${t.sex})`;
+    list.appendChild(li);
+  });
+}
+
+/* ---------- CLEAR ALL ---------- */
+function clearAll() {
+  if (!confirm("Delete all tokens for today?")) return;
+  localStorage.removeItem("tokens_" + todayKey);
+  loadDashboard();
+  updateTokenCount();
+}
+</script>
+    <script>
+/* ===== TOKEN SYSTEM LOGIC ===== */
+
+let tokenData = JSON.parse(localStorage.getItem("tokens")) || [];
+let today = new Date().toLocaleDateString();
+
+/* Show next date */
+document.getElementById("nextDate").textContent = today;
+
+/* Update token count */
+function updateTokenCount() {
+  const todayTokens = tokenData.filter(t => t.date === today);
+  document.getElementById("tokenCountDisplay").textContent =
+    "Tokens today: " + todayTokens.length;
+}
+updateTokenCount();
+
+/* TAKE TOKEN */
+function takeToken() {
+  const name = document.getElementById("patientName").value.trim();
+  const age = document.getElementById("age").value;
+  const sex = document.getElementById("sex").value;
+  const mobile = document.getElementById("mobile").value;
+
+  if (!name || !age || !sex || !mobile) {
+    alert("Please fill all details");
+    return;
+  }
+
+  const now = new Date();
+
+  /* ⏰ LAST TOKEN TIME — 12 AM */
+  if (now.getHours() === 0) {
+    alert("Token booking closed after 12 AM");
+    return;
+  }
+
+  const todayTokens = tokenData.filter(t => t.date === today);
+  const tokenNumber = todayTokens.length + 1;
+
+  const token = {
+    token: tokenNumber,
+    name,
+    age,
+    sex,
+    mobile,
+    date: today,
+    time: now.toLocaleTimeString()
+  };
+
+  tokenData.push(token);
+  localStorage.setItem("tokens", JSON.stringify(tokenData));
+
+  /* DISPLAY TOKEN */
+  document.getElementById("tokenNo").textContent = "TOKEN " + tokenNumber;
+  document.getElementById("tokenDate").textContent =
+    today + " • " + token.time;
+
+  document.getElementById("tokenResult").style.display = "block";
+
+  updateTokenCount();
+}
+
+/* PRINT TOKEN */
+function printToken() {
+  window.print();
+}
+
+/* ===== AUTHORIZED ACCESS ===== */
+const MASTER_PIN = "1234";
+
+function checkPin() {
+  const pin = document.getElementById("pinInput").value;
+  if (pin !== MASTER_PIN) {
+    alert("Invalid PIN");
+    return;
+  }
+
+  document.getElementById("dashboard").style.display = "block";
+  renderDashboard();
+}
+
+function renderDashboard() {
+  const list = document.getElementById("tokenList");
+  list.innerHTML = "";
+
+  tokenData.forEach(t => {
+    const li = document.createElement("li");
+    li.textContent = `#${t.token} - ${t.name} (${t.age})`;
+    list.appendChild(li);
+  });
+}
+
+function clearAll() {
+  if (!confirm("Delete all token records?")) return;
+  localStorage.removeItem("tokens");
+  tokenData = [];
+  document.getElementById("dashboard").style.display = "none";
+  updateTokenCount();
+}
+</script>
 </body>
 </html>
