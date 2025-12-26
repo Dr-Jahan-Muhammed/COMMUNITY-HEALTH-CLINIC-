@@ -184,9 +184,9 @@ document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => {
     welcomeOverlay.classList.add("hide"); // fade out
     setTimeout(() => {
-      welcomeOverlay.style.display = "none"; // remove from DOM
-    }, 1000);
-  }, 2000); // 2 seconds before hiding
+      welcomeOverlay.style.display = "none"; // remove from view
+    }, 1000); // wait for fade transition
+  }, 2000); // 2 seconds before starting fade
 });
 /* ================== HEADER SCROLL ================== */
 window.addEventListener("scroll",()=>{header.classList.toggle("scrolled",window.scrollY>10)});
