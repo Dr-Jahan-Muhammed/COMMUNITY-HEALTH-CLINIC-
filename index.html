@@ -179,8 +179,14 @@ function rotateQuotes(){
   qIndex=(qIndex+1)%quotes.length;
 }
 setInterval(rotateQuotes,4000);
-document.addEventListener("DOMContentLoaded",()=>{
-  setTimeout(()=>{welcomeOverlay.classList.add("hide");setTimeout(()=>welcomeOverlay.style.display="none",1000)},2000);
+document.addEventListener("DOMContentLoaded", () => {
+  const welcomeOverlay = document.getElementById("welcomeOverlay"); // select the element
+  setTimeout(() => {
+    welcomeOverlay.classList.add("hide"); // fade out
+    setTimeout(() => {
+      welcomeOverlay.style.display = "none"; // remove from DOM
+    }, 1000);
+  }, 2000); // 2 seconds before hiding
 });
 /* ================== HEADER SCROLL ================== */
 window.addEventListener("scroll",()=>{header.classList.toggle("scrolled",window.scrollY>10)});
