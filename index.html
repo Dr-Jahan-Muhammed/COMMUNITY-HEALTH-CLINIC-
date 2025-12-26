@@ -37,9 +37,15 @@ body.dark .since { color:#ccc; } .clinic { font-size: 22px; font-weight: 700; di
 
 .theme-btn {
   position: fixed; top: 10px; right: 10px; z-index: 2000;
-  padding: 8px 14px; border: none; border-radius: 8px;
-  background: #16a34a; color: white; cursor: pointer;
+  width: 44px; height: 44px; border: none; border-radius: 50%;
+  background: #facc15; color: #111;
+  cursor: pointer; font-size: 20px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 16px rgba(0,0,0,.25);
+  transition: transform .3s, background .3s;
 }
+body.dark .theme-btn { background:#1f2937; color:#facc15; }
+.theme-btn:hover { transform: rotate(20deg); }
 
 section { padding: 22px 16px; }
 .section-title { font-size: 20px; font-weight: 600; margin-bottom: 14px; text-align: center; }
@@ -69,11 +75,11 @@ body.dark .service { background:#222; color:#f0f0f0; box-shadow:0 4px 12px rgba(
 <body>  <!-- 1️⃣ WELCOME -->  <div id="welcome" class="welcome" style="pointer-events:none;">
     <h1>WELCOME</h1>
     <p id="quote">“Health is the real wealth.”</p>
-  </div><button class="theme-btn" onclick="toggleTheme()">Dark / Light</button>
+  </div><button class="theme-btn" onclick="toggleTheme()" id="themeToggle">☀️</button>
 
   <!-- 2️⃣ HEADER -->  <header id="header">
     <div class="since">Since 2003</div>
-    <div class="clinic">COMMUNITY HEALTH CLINIC <img src="https://img.icons8.com/color/48/medical-doctor.png" alt="Health emblem" style="width:22px;height:22px"></div>
+    <div class="clinic">COMMUNITY HEALTH CLINIC <img src="https://img.icons8.com/color/48/iv-bag.png" alt="Clinic emblem" style="width:20px;height:20px;filter:hue-rotate(45deg) saturate(1.4);"></div>
     <div class="address">Cheenimukku, Poonoor</div>
     <div class="contact">📞 9961252798</div>
     <div id="opBadge" class="badge">Checking OP…</div>
@@ -143,6 +149,8 @@ body.dark .service { background:#222; color:#f0f0f0; box-shadow:0 4px 12px rgba(
   /* THEME */
   function toggleTheme() {
     document.body.classList.toggle('dark');
+    const btn = document.getElementById('themeToggle');
+    btn.textContent = document.body.classList.contains('dark') ? '🌙' : '☀️';
   }
 </script></body>
 </html>
