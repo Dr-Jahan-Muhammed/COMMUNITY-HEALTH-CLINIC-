@@ -1,4 +1,4 @@
- <!DOCTYPE html><html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -109,11 +109,24 @@ body.dark .service { background:#222; color:#f0f0f0; box-shadow:0 4px 12px rgba(
     qi = (qi + 1) % quotes.length;
   }, 4000);
 
+  let welcomeGone = false;
+
+  function hideWelcome() {
+    if (welcomeGone) return;
+    welcomeGone = true;
+    welcome.classList.add('hidden');
+    setTimeout(() => welcome.style.display = 'none', 600);
+  }
+
+  // Auto-hide after 2.5 seconds (desktop & mobile)
+  setTimeout(hideWelcome, 2500);
+
+  // Scroll-based fade (if user scrolls earlier)
   window.addEventListener('scroll', () => {
     const y = window.scrollY;
     welcome.style.transform = `translateY(${y * -0.2}px)`;
     welcome.style.opacity = Math.max(0, 1 - y / 200);
-    if (y > 220) welcome.classList.add('hidden');
+    if (y > 120) hideWelcome();
   });
 
   /* HEADER SCROLL */
