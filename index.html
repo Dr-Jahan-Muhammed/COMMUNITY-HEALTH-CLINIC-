@@ -5,24 +5,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Community Health Clinic</title>
 
-<!-- FontAwesome for icons -->
-<script src="https://kit.fontawesome.com/yourkitid.js" crossorigin="anonymous"></script>
+<!-- ANCHOR: ICON_KIT -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
 <style>
-/* ===== BASE ===== */
-*{box-sizing:border-box}
+/* === BASE STYLES === */
+/* ANCHOR: BASE_CSS */
+*{box-sizing:border-box;}
 body{
   margin:0;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background:#f8fafc;
   color:#222;
 }
 
-/* ===== WELCOME OVERLAY ===== */
+/* === FADE ANIMATION === */
+/* ANCHOR: FADE_ANIMATION */
+.fade {
+  animation: fadeIn 1s ease-in-out;
+}
+@keyframes fadeIn {
+  from {opacity:0;}
+  to {opacity:1;}
+}
+
+/* === WELCOME OVERLAY === */
+/* ANCHOR: WELCOME_OVERLAY */
 .welcome-overlay{
   position:fixed;
   inset:0;
-  background:rgba(255,255,255,0.92);
+  background:rgba(255,255,255,0.95);
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -38,7 +50,8 @@ body{
 .welcome-overlay h1{font-size:42px;margin:0}
 .welcome-overlay p{margin-top:10px;font-style:italic;color:#555}
 
-/* ===== HEADER ===== */
+/* === HEADER === */
+/* ANCHOR: HEADER_CSS */
 header{
   position:sticky;
   top:0;
@@ -47,9 +60,10 @@ header{
   padding:14px;
   text-align:center;
   transition:.3s;
+  box-shadow:0 2px 5px rgba(0,0,0,0.1);
 }
 header.scrolled{
-  background:rgba(255,255,255,.7);
+  background:rgba(255,255,255,.8);
   backdrop-filter:blur(10px);
 }
 .since{font-size:12px;color:#777}
@@ -57,25 +71,20 @@ header.scrolled{
 .plus{color:#facc15;font-weight:900}
 .address{font-size:13px;color:#666}
 
-/* ===== QUOTES ===== */
+/* === QUOTES === */
+/* ANCHOR: QUOTE_BOX */
 .quote-box{
   text-align:center;
   font-style:italic;
   color:#555;
   margin:10px 0;
   font-size:16px;
+  opacity:0;
+  transition:opacity 1s;
 }
 
-/* ===== SECTIONS ===== */
-section{padding:20px 16px}
-.section-title{
-  font-size:20px;
-  font-weight:600;
-  margin-bottom:14px;
-  text-align:left;
-}
-
-/* ===== SERVICES ===== */
+/* === SERVICES === */
+/* ANCHOR: SERVICES_CSS */
 .services{
   display:grid;
   grid-template-columns:repeat(2,1fr);
@@ -85,16 +94,22 @@ section{padding:20px 16px}
   background:white;
   padding:14px;
   border-radius:14px;
-  box-shadow:0 4px 10px rgba(0,0,0,.05);
+  box-shadow:0 4px 10px rgba(0,0,0,.08);
   text-align:center;
   font-size:14px;
   display:flex;
   align-items:center;
-  gap:8px;
+  gap:10px;
+  transition:transform 0.2s, box-shadow 0.2s;
 }
-.service-card i{font-size:20px;color:#16a34a}
+.service-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 6px 14px rgba(0,0,0,0.15);
+}
+.service-card i{font-size:22px;color:#16a34a}
 
-/* ===== TOKEN FORM ===== */
+/* === TOKEN FORM === */
+/* ANCHOR: TOKEN_SECTION */
 .token-section{
   display:flex;
   flex-direction:column;
@@ -104,7 +119,7 @@ section{padding:20px 16px}
   background:white;
   padding:24px;
   border-radius:18px;
-  box-shadow:0 8px 20px rgba(0,0,0,.08);
+  box-shadow:0 8px 20px rgba(0,0,0,.12);
   max-width:400px;
   width:100%;
   margin-bottom:16px;
@@ -124,9 +139,12 @@ section{padding:20px 16px}
   background:#16a34a;
   color:white;
   font-size:16px;
+  cursor:pointer;
 }
+#liveTokenCount{font-size:14px;margin-top:5px;text-align:center;color:#555;}
 
-/* ===== TOKEN DISPLAY / TICKET ===== */
+/* === TOKEN DISPLAY / TICKET === */
+/* ANCHOR: TOKEN_DISPLAY */
 .token-display{
   margin-top:16px;
   padding:18px;
@@ -136,22 +154,27 @@ section{padding:20px 16px}
   position:relative;
   max-width:400px;
   width:100%;
-  box-shadow:0 6px 18px rgba(0,0,0,.1);
+  box-shadow:0 6px 18px rgba(0,0,0,.15);
 }
 .token-number{font-size:32px;font-weight:800}
 .token-date{font-size:14px;color:#555}
 .print-btn{
   margin-top:10px;
-  padding:10px;
+  padding:10px 12px;
   border:none;
-  border-radius:12px;
+  border-radius:14px;
   background:#2563eb;
   color:white;
   cursor:pointer;
   font-size:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
 }
 
-/* ===== FEEDBACK ===== */
+/* === FEEDBACK === */
+/* ANCHOR: FEEDBACK_CSS */
 .stars span{
   font-size:28px;
   cursor:pointer;
@@ -173,9 +196,11 @@ textarea{
   border-radius:12px;
   background:#2563eb;
   color:white;
+  cursor:pointer;
 }
 
-/* ===== DASHBOARD ===== */
+/* === DASHBOARD === */
+/* ANCHOR: DASHBOARD_CSS */
 .dashboard{
   background:white;
   padding:16px;
@@ -191,6 +216,7 @@ textarea{
   border-radius:10px;
   background:#dc2626;
   color:white;
+  cursor:pointer;
 }
 .toggle-section{
   margin-top:10px;
@@ -198,29 +224,28 @@ textarea{
   align-items:center;
   gap:8px;
 }
-.toggle-section input[type=checkbox]{width:auto}
+.toggle-section input[type=checkbox]{width:auto;cursor:pointer;}
 </style>
 </head>
-
 <body>
 
-<!-- WELCOME -->
-<div id="welcomeOverlay" class="welcome-overlay">
+<!-- ANCHOR: WELCOME_OVERLAY -->
+<div id="welcomeOverlay" class="welcome-overlay fade">
   <h1>WELCOME</h1>
   <p id="quoteText">“Health is the real wealth.”</p>
 </div>
 
-<!-- HEADER -->
+<!-- ANCHOR: HEADER -->
 <header id="header">
   <div class="since">Since 2003</div>
   <div class="clinic-name">COMMUNITY HEALTH CLINIC <span class="plus">+</span></div>
   <div class="address">Cheenimukku, Poonoor</div>
 </header>
 
-<!-- QUOTES -->
+<!-- ANCHOR: QUOTE_BOX -->
 <div class="quote-box" id="quoteBox"></div>
 
-<!-- SERVICES -->
+<!-- ANCHOR: SERVICES -->
 <section>
   <div class="section-title">Services</div>
   <div class="services">
@@ -231,11 +256,11 @@ textarea{
     <div class="service-card"><i class="fas fa-oxygen"></i>Oxygen</div>
     <div class="service-card"><i class="fas fa-briefcase-medical"></i>Minor Procedures</div>
     <div class="service-card"><i class="fas fa-hand-holding-medical"></i>Wound Management</div>
-    <div class="service-card"><i class="fas fa-home"></i>Home Sample Collection (on request)</div>
+    <div class="service-card"><i class="fas fa-home"></i>Home Sample Collection</div>
   </div>
 </section>
 
-<!-- TOKEN -->
+<!-- ANCHOR: TOKEN_SECTION -->
 <section class="token-section">
   <div class="section-title">Take Token (Next Day: <span id="nextDate"></span>)</div>
   <div class="token-box">
@@ -259,7 +284,7 @@ textarea{
   </div>
 </section>
 
-<!-- FEEDBACK -->
+<!-- ANCHOR: FEEDBACK_SECTION -->
 <section>
   <div class="section-title">Feedback & Authorized Access</div>
   <div class="stars" id="stars">
@@ -273,7 +298,7 @@ textarea{
   <button class="feedback-btn" onclick="submitFeedback()">Submit</button>
 </section>
 
-<!-- DASHBOARD -->
+<!-- ANCHOR: DASHBOARD_SECTION -->
 <section>
   <input id="pinInput" type="password" placeholder="Enter Master/View PIN">
   <button onclick="checkPin()">Enter</button>
@@ -283,58 +308,73 @@ textarea{
     <ul id="tokenList"></ul>
     <h4>Feedback</h4>
     <ul id="feedbackList"></ul>
+
+    <!-- ANCHOR: OTP_TOGGLE -->
     <div class="toggle-section">
       <input type="checkbox" id="otpToggle">
       <label for="otpToggle">Enable OTP Verification</label>
     </div>
+
+    <!-- ANCHOR: PAUSE_TOGGLE -->
+    <div class="toggle-section">
+      <input type="checkbox" id="pauseToggle">
+      <label for="pauseToggle">Pause Token Taking</label>
+    </div>
+
     <button id="masterBtn" style="display:none;" onclick="clearAll()">Delete All Records</button>
   </div>
 </section>
 
 <script>
-// ===== QUOTES =====
-const quotes=["Health is the real wealth.","A healthy outside starts from inside.","An ounce of prevention is worth a pound of cure.","Healing is a matter of time, but it is sometimes also a matter of opportunity."];
+// === QUOTES ROTATION ===
+const quotes=["Health is the real wealth.","A healthy outside starts from inside.","An ounce of prevention is worth a pound of cure.","Healing is a matter of time, but sometimes also a matter of opportunity."];
 let quoteIndex=0;
 function rotateQuotes(){
-  document.getElementById("quoteBox").textContent=quotes[quoteIndex];
-  quoteIndex=(quoteIndex+1)%quotes.length;
+  let box=document.getElementById("quoteBox");
+  box.style.opacity=0;
+  setTimeout(()=>{
+    box.textContent=quotes[quoteIndex];
+    box.style.opacity=1;
+    quoteIndex=(quoteIndex+1)%quotes.length;
+  },500);
 }
 setInterval(rotateQuotes,5000);
 rotateQuotes();
 
-// ===== WELCOME FADE =====
+// === WELCOME FADE & NEXT DAY DATE ===
 document.addEventListener("DOMContentLoaded",()=>{
   setTimeout(()=>{
     document.getElementById("welcomeOverlay").classList.add("hide");
     setTimeout(()=>document.getElementById("welcomeOverlay").style.display="none",1000);
   },2000);
-  // Set next day date
-  let d=new Date();
-  d.setDate(d.getDate()+1);
+  let d=new Date(); d.setDate(d.getDate()+1);
   document.getElementById("nextDate").textContent=d.toDateString();
 });
 
-// ===== HEADER SCROLL =====
+// === HEADER SCROLL ===
 window.addEventListener("scroll",()=>{
   document.getElementById("header").classList.toggle("scrolled",window.scrollY>10);
 });
 
-// ===== TOKEN STORAGE =====
+// === TOKEN STORAGE ===
 let tokens=JSON.parse(localStorage.getItem("tokens")||"[]");
 let feedbacks=JSON.parse(localStorage.getItem("feedbacks")||"[]");
 updateLiveTokenCount();
 
+// ANCHOR: TAKE_TOKEN_FUNCTION
 function takeToken(){
   const pname=document.getElementById("patientName").value.trim();
   const ageVal=document.getElementById("age").value;
   const sexVal=document.getElementById("sex").value;
   const mobileVal=document.getElementById("mobile").value.trim();
+  const now=new Date();
   if(!pname||!ageVal||!sexVal||!mobileVal){alert("Fill all details");return;}
+  if(document.getElementById("pauseToggle").checked){alert("Token taking is paused"); return;}
+  if(now.getHours()>=22){alert("Token cannot be taken after 10 PM"); return;}
   if(tokens.find(t=>t.name===pname && t.age===ageVal && t.sex===sexVal)){alert("Token already taken");return;}
 
   const no=tokens.length+1;
-  let d=new Date();
-  d.setDate(d.getDate()+1);
+  let d=new Date(); d.setDate(d.getDate()+1);
 
   tokens.push({no,name:pname,age:ageVal,sex:sexVal,mobile:mobileVal,date:d.toDateString()});
   localStorage.setItem("tokens",JSON.stringify(tokens));
@@ -346,11 +386,12 @@ function takeToken(){
   updateLiveTokenCount();
 }
 
+// ANCHOR: LIVE_TOKEN_COUNT_UPDATE
 function updateLiveTokenCount(){
   document.getElementById("liveTokenCount").textContent="Tokens Taken: "+tokens.length;
 }
 
-// ===== PRINT TOKEN =====
+// ANCHOR: PRINT_TOKEN_FUNCTION
 function printToken(){
   let content=document.getElementById("tokenResult").innerHTML;
   let w=window.open();
@@ -359,7 +400,7 @@ function printToken(){
   w.print();
 }
 
-// ===== FEEDBACK =====
+// === FEEDBACK ===
 let rating=0;
 document.querySelectorAll("#stars span").forEach(s=>{
   s.onclick=()=>{
@@ -375,7 +416,7 @@ function submitFeedback(){
   document.getElementById("fbText").value="";
 }
 
-// ===== DASHBOARD =====
+// === DASHBOARD ===
 const VIEW_PIN="1234";
 const MASTER_PIN="9999";
 function checkPin(){
@@ -386,12 +427,15 @@ function checkPin(){
     loadDashboard();
   }else alert("Invalid PIN");
 }
+
+// ANCHOR: LOAD_DASHBOARD
 function loadDashboard(){
   let tokenList=document.getElementById("tokenList");
   tokenList.innerHTML="";
   tokens.forEach(t=>{
     let li=document.createElement("li");
-    li.textContent=`#${t.no} ${t.name} (${t.age}/${t.sex}) - ${t.mobile} [${t.date}]`;
+    li.innerHTML=`#${t.no} ${t.name} (${t.age}/${t.sex}) - ${t.mobile} [${t.date}] 
+      <button onclick="editToken(${t.no})">Edit</button>`;
     tokenList.appendChild(li);
   });
   let feedbackList=document.getElementById("feedbackList");
@@ -402,6 +446,26 @@ function loadDashboard(){
     feedbackList.appendChild(li);
   });
 }
+
+// ANCHOR: EDIT_TOKEN_FUNCTION
+function editToken(no){
+  let token=tokens.find(t=>t.no===no);
+  if(!token) return;
+  let newName=prompt("Patient Name:",token.name);
+  let newAge=prompt("Age:",token.age);
+  let newSex=prompt("Sex:",token.sex);
+  let newMobile=prompt("Mobile Number:",token.mobile);
+  if(newName && newAge && newSex && newMobile){
+    token.name=newName;
+    token.age=newAge;
+    token.sex=newSex;
+    token.mobile=newMobile;
+    localStorage.setItem("tokens",JSON.stringify(tokens));
+    loadDashboard();
+  }
+}
+
+// ANCHOR: CLEAR_ALL
 function clearAll(){
   if(confirm("Delete all records?")){localStorage.clear();location.reload();}
 }
