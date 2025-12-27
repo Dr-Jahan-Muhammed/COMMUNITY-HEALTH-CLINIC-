@@ -517,45 +517,65 @@ function takeToken() {
 /* ============================
    DOWNLOAD TOKEN
    ============================ */
-function downloadToken() {
-  const { jsPDF } = window.jspdf; // import jsPDF
+async function downloadToken() {
+  const { jsPDF } = window.jspdf;
+
   const doc = new jsPDF({
-    unit: 'px',   // use pixels
+    unit: "px",
     format: [300, 500] // width x height of token
   });
 
-  // Fetch token details
+  // --- Fetch token details ---
   const tokenNo = document.getElementById("tokenNo").innerText;
-  const tokenDate = document.getElementById("tokenDate").innerText;
+  const tokenDate = document.getElementById("tokenDate").innerText.replace("Date: ", "");
   const name = document.getElementById("patientName").value;
   const age = document.getElementById("age").value;
   const sex = document.getElementById("sex").value;
 
-  // Add content to PDF
+  // --- Load header icon ---
+  const iconUrl = "https://cdn-icons-png.flaticon.com/512/4006/4006511.png";
+  const img = new Image();
+  img.crossOrigin = "anonymous";
+  img.src = iconUrl;
+  await new Promise(resolve => img.onload = resolve);
+
+  // --- HEADER REPLICA ---
+  doc.addImage(img, "PNG", 20, 20, 35, 35); // icon left
+  doc.setFont("helvetica", "bold");
   doc.setFontSize(14);
-  doc.text("COMMUNITY HEALTH CLINIC", 20, 30);
+  doc.text("COMMUNITY HEALTH CLINIC", 100, 35); // aligned with icon
   doc.setFontSize(10);
-  doc.text("Since 2003", 20, 45);
-  doc.text("Cheenimukku, Poonoor", 20, 60);
-  doc.setLineWidth(0.5);
-  doc.line(20, 70, 280, 70); // horizontal line
+  doc.setFont("helvetica", "normal");
+  doc.text("Since 2003", 100, 50);
+  doc.text("Cheenimukku, Poonoor", 100, 65);
+  doc.text("📞 9961252798", 100, 80);
 
+  // --- Dashed line below header ---
+  doc.setLineWidth(0.5);
+  const dash = [3, 3];
+  doc.setLineDash(dash, 0);
+  doc.line(20, 90, 280, 90);
+  doc.setLineDash([]); // reset to solid for rest
+
+  // --- TOKEN DETAILS ---
   doc.setFontSize(12);
-  doc.text(`Name: ${name}`, 20, 90);
-  doc.text(`Age: ${age}`, 20, 110);
-  doc.text(`Sex: ${sex}`, 20, 130);
+  doc.text(`Name: ${name}`, 20, 110);
+  doc.text(`Age: ${age}`, 20, 130);
+  doc.text(`Sex: ${sex}`, 20, 150);
 
   doc.setLineWidth(0.5);
-  doc.line(20, 140, 280, 140); // another horizontal line
+  doc.line(20, 160, 280, 160);
 
   doc.setFontSize(24);
-  doc.text(`${tokenNo}`, 100, 170);
+  doc.setFont("helvetica", "bold");
+  doc.text(`${tokenNo}`, 100, 190);
 
   doc.setFontSize(10);
-  doc.text(tokenDate, 20, 200);
-  doc.text("Please wait for your turn", 20, 220);
+  doc.setFont("helvetica", "normal");
+  doc.text(tokenDate, 20, 220);
+  doc.text("Please wait for your turn", 20, 240);
 
-  // Trigger download
+  // --- DOWNLOAD PDF ---
   doc.save(`${name}_Token.pdf`);
 }
           
