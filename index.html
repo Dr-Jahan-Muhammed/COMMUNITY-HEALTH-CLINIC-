@@ -522,7 +522,7 @@ async function downloadToken() {
 
   const doc = new jsPDF({
     unit: "px",
-    format: [300, 500] // width x height of token
+    format: [300, 500] // token ticket size
   });
 
   // --- Fetch token details ---
@@ -540,40 +540,40 @@ async function downloadToken() {
   await new Promise(resolve => img.onload = resolve);
 
   // --- HEADER REPLICA ---
-  doc.addImage(img, "PNG", 20, 20, 35, 35); // icon left
+  doc.addImage(img, "PNG", 20, 20, 40, 40); // icon left
   doc.setFont("helvetica", "bold");
   doc.setFontSize(14);
-  doc.text("COMMUNITY HEALTH CLINIC", 100, 35); // aligned with icon
+  doc.text("COMMUNITY HEALTH CLINIC", 70, 35); // aligned with icon vertically
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
-  doc.text("Since 2003", 100, 50);
-  doc.text("Cheenimukku, Poonoor", 100, 65);
-  doc.text("📞 9961252798", 100, 80);
+  doc.text("Since 2003", 70, 50);
+  doc.text("Cheenimukku, Poonoor", 70, 65);
+  doc.text("📞 9961252798", 70, 80);
 
   // --- Dashed line below header ---
   doc.setLineWidth(0.5);
-  const dash = [3, 3];
-  doc.setLineDash(dash, 0);
-  doc.line(20, 90, 280, 90);
-  doc.setLineDash([]); // reset to solid for rest
+  doc.setLineDash([3, 3], 0); // dashed
+  doc.line(20, 95, 280, 95);
+  doc.setLineDash([]); // reset dash
 
   // --- TOKEN DETAILS ---
   doc.setFontSize(12);
-  doc.text(`Name: ${name}`, 20, 110);
-  doc.text(`Age: ${age}`, 20, 130);
-  doc.text(`Sex: ${sex}`, 20, 150);
+  doc.setFont("helvetica", "normal");
+  doc.text(`Name: ${name}`, 20, 115);
+  doc.text(`Age: ${age}`, 20, 135);
+  doc.text(`Sex: ${sex}`, 20, 155);
 
   doc.setLineWidth(0.5);
-  doc.line(20, 160, 280, 160);
+  doc.line(20, 165, 280, 165); // horizontal line
 
   doc.setFontSize(24);
   doc.setFont("helvetica", "bold");
-  doc.text(`${tokenNo}`, 100, 190);
+  doc.text(`${tokenNo}`, 120, 200); // centered
 
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
-  doc.text(tokenDate, 20, 220);
-  doc.text("Please wait for your turn", 20, 240);
+  doc.text(tokenDate, 20, 230);
+  doc.text("Please wait for your turn", 20, 250);
 
   // --- DOWNLOAD PDF ---
   doc.save(`${name}_Token.pdf`);
