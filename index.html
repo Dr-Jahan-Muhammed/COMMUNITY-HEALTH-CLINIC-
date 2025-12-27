@@ -507,13 +507,64 @@ function takeToken() {
 
 /* ---------- PRINT ---------- */
 function printToken() {
-  const printContent = document.getElementById("tokenResult").innerHTML;
-  const win = window.open("", "", "width=300,height=400");
-  win.document.write(`<html><body>${printContent}</body></html>`);
-  win.print();
-  win.close();
-}
+  const tokenNo = document.getElementById("tokenNo").innerText;
+  const tokenDate = document.getElementById("tokenDate").innerText;
 
+  const printWindow = window.open("", "_blank", "width=400,height=600");
+
+  printWindow.document.write(`
+    <html>
+    <head>
+      <title>OP Token</title>
+      <style>
+        body {
+          font-family: monospace;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          margin: 0;
+        }
+        .token-slip {
+          width: 280px;
+          border: 2px dashed #16a34a;
+          padding: 20px;
+          text-align: center;
+        }
+        h2 {
+          margin: 0 0 10px;
+        }
+        .token-no {
+          font-size: 36px;
+          font-weight: bold;
+          margin: 10px 0;
+        }
+        .date {
+          font-size: 14px;
+          margin-top: 8px;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="token-slip">
+        <h2>COMMUNITY HEALTH CLINIC</h2>
+        <div class="token-no">${tokenNo}</div>
+        <div class="date">${tokenDate}</div>
+        <div class="date">Please wait for your turn</div>
+      </div>
+
+      <script>
+        window.onload = function () {
+          window.print();
+          window.close();
+        };
+      <\/script>
+    </body>
+    </html>
+  `);
+
+  printWindow.document.close();
+}
 /* ============================
    AUTHORIZED ACCESS
    ============================ */
