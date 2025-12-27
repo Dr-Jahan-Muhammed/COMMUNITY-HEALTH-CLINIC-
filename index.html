@@ -164,6 +164,23 @@ body.dark .service-card{background:#222;color:#eee}
   .services{grid-template-columns:repeat(2,140px)}
   #sidebar-wrapper{left:0; top:50%; transform:translateY(-50%) scale(0.85)}
 }
+.star-rating {
+  display: flex;
+  justify-content: flex-start;
+  font-size: 24px;
+}
+
+.star-rating span {
+  cursor: pointer;
+  color: #ccc;
+  transition: color 0.2s;
+  margin-right: 5px;
+}
+
+.star-rating span.hovered,
+.star-rating span.selected {
+  color: gold;
+}
 </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
@@ -392,8 +409,7 @@ body.dark .dashboard{background:#1e1e1e;color:#f0f0f0}
       <option>Other</option>
     </select>
     <input id="mobile" placeholder="Mobile Number">
-    <div id="tokenCountDisplay" style="margin-bottom:8px;font-size:14px;color:#555"></div>
-  <button onclick="takeToken()">Take Token</button>
+ <div id="tokenCountDisplay" class="token-count"></div>  <button onclick="takeToken()">Take Token</button>
   </div>
 
   <div id="tokenResult" class="token-display">
@@ -401,6 +417,9 @@ body.dark .dashboard{background:#1e1e1e;color:#f0f0f0}
     <div class="token-number" id="tokenNo"></div>
     <div class="token-date" id="tokenDate"></div>
     <button class="print-btn" onclick="downloadToken()">⬇️ Download Token</button> </div>
+  
+ 
+</div>
 </section>
 <section class="auth-container">
   <div class="section-title">Authorized Access</div>
@@ -408,10 +427,23 @@ body.dark .dashboard{background:#1e1e1e;color:#f0f0f0}
     <input id="pinInput" type="password" placeholder="Enter PIN">
     <button onclick="checkPin()">Enter</button>
   </div>
-  <div id="dashboard" class="dashboard">
-    <h4>Tokens</h4>
-    <ul id="tokenList"></ul>
-  </div>
+<div class="dashboard" id="dashboard">
+  <label for="selectDate">Select Date:</label>
+  <input type="date" id="selectDate" style="margin-bottom:10px;">
+  <ul id="tokenList"></ul>
+</div>
+  <script>
+  // Step 3: Date picker event listener
+  const datePicker = document.getElementById("selectDate");
+  datePicker.addEventListener("change", (e) => {
+    const selectedDate = new Date(e.target.value).toDateString();
+    loadDashboard(selectedDate);
+  });
+
+  // Optional: set default date and load today's tokens
+  datePicker.valueAsDate = new Date();
+  loadDashboard(todayKey);
+</script>
 </section>
 <script>
 /* ============================
@@ -584,7 +616,7 @@ async function downloadToken() {
 
   const doc = new jsPDF({
     unit: "px",
-    format: [300, 300] // token ticket size
+    format: [300, 150] // token ticket size
   });
 
   // --- Fetch token details ---
@@ -632,7 +664,7 @@ async function downloadToken() {
 
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
-  doc.text(tokenDate, 20, 120);
+  doc.text(tokenDate, 120, 100);
   doc.text("Please wait for your turn", 20, 150);
 
   // --- DOWNLOAD PDF ---
@@ -655,43 +687,49 @@ function checkPin() {
 /* ============================
    DASHBOARD
    ============================ */
-async function loadDashboard() {
+
+
+async function loadDashboard(selectedDate) {
   const list = document.getElementById("tokenList");
   list.innerHTML = ""; // clear current list
 
-  // Get all documents in the 'tokens' collection
-  const snapshot = await db.collection("tokens").get();
+  // If no date selected, use today
+  if (!selectedDate) selectedDate = todayKey;
 
-  if (snapshot.empty) {
-    list.innerHTML = "<li>No tokens issued yet</li>";
+  // Get the document for the selected date only
+  const docRef = db.collection("tokens").doc(selectedDate);
+  const docSnap = await docRef.get();
+
+  if (!docSnap.exists || (docSnap.data().tokens || []).length === 0) {
+    list.innerHTML = "<li>No tokens for this date</li>";
     return;
   }
 
-  snapshot.forEach(doc => {
-    const tokenDate = doc.id; // document ID is the date
-    const tokens = doc.data().tokens || [];
+  const tokens = docSnap.data().tokens;
 
-    // Create a header for the date
-    const dateHeader = document.createElement("li");
-    dateHeader.style.fontWeight = "bold";
-    dateHeader.style.marginTop = "10px";
-    dateHeader.textContent = `Date: ${tokenDate} (${tokens.length} tokens)`;
-    list.appendChild(dateHeader);
+  // Show a header with date and count
+  const dateHeader = document.createElement("li");
+  dateHeader.style.fontWeight = "bold";
+  dateHeader.style.marginTop = "10px";
+  dateHeader.textContent = `Date: ${selectedDate} (${tokens.length} tokens)`;
+  list.appendChild(dateHeader);
 
-    // List all tokens for that day
-    tokens.forEach(t => {
-      const li = document.createElement("li");
-      li.textContent = `#${t.token} - ${t.name} (${t.age}, ${t.sex}, ${t.mobile})`;
-      list.appendChild(li);
-    });
-  });
+  // List each token
+  tokens.forEach(t => {
+    const li = document.createElement("li");
+    li.textContent = `#${t.token} - ${t.name} (${t.age}, ${t.sex}, ${t.mobile})`; 
+
+    list.appendChild(li);
+  }); 
 }
 
-/* ============================
-   CLEAR ALL
-   ============================ */
+ 
 
-</script>
+
+  
+
+
+ </script>
   <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
