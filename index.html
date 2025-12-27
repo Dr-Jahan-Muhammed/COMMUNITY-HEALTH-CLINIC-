@@ -542,18 +542,16 @@ async function downloadToken() {
   // --- HEADER REPLICA ---
   doc.addImage(img, "PNG", 20, 20, 40, 40); // icon left
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(14);
+  doc.setFontSize(18);
   doc.text("COMMUNITY HEALTH CLINIC", 70, 35); // aligned with icon vertically
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
-  doc.text("Since 2003", 70, 50);
-  doc.text("Cheenimukku, Poonoor", 70, 65);
-  doc.text("📞 9961252798", 70, 80);
+  doc.text("Cheenimukku, Poonoor", 70, 53);
 
   // --- Dashed line below header ---
-  doc.setLineWidth(0.5);
-  doc.setLineDash([3, 3], 0); // dashed
-  doc.line(20, 95, 280, 95);
+  doc.setLineWidth(1);
+  doc.setLineDash([4, 2], 0); // dashed
+  doc.line(20, 80, 280, 80);
   doc.setLineDash([]); // reset dash
 
   // --- TOKEN DETAILS ---
