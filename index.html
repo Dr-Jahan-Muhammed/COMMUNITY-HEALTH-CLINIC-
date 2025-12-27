@@ -165,8 +165,8 @@ body.dark .service-card{background:#222;color:#eee}
   #sidebar-wrapper{left:0; top:50%; transform:translateY(-50%) scale(0.85)}
 }
 </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
-
 <body>
 
 <!-- SIDEBAR WRAPPER -->
@@ -516,60 +516,50 @@ function takeToken() {
 }
 
 /* ============================
-   PRINT TOKEN
+   DOWNLOAD TOKEN
    ============================ */
-function printToken() {
+function downloadToken() {
+  const { jsPDF } = window.jspdf; // import jsPDF
+  const doc = new jsPDF({
+    unit: 'px',   // use pixels
+    format: [300, 500] // width x height of token
+  });
+
+  // Fetch token details
   const tokenNo = document.getElementById("tokenNo").innerText;
   const tokenDate = document.getElementById("tokenDate").innerText;
   const name = document.getElementById("patientName").value;
   const age = document.getElementById("age").value;
   const sex = document.getElementById("sex").value;
 
-  const printWindow = window.open("", "_blank", "width=400,height=600");
+  // Add content to PDF
+  doc.setFontSize(14);
+  doc.text("COMMUNITY HEALTH CLINIC", 20, 30);
+  doc.setFontSize(10);
+  doc.text("Since 2003", 20, 45);
+  doc.text("Cheenimukku, Poonoor", 20, 60);
+  doc.setLineWidth(0.5);
+  doc.line(20, 70, 280, 70); // horizontal line
 
-  printWindow.document.write(`
-    <html>
-    <head>
-      <title>OP Token</title>
-      <style>
-        body{font-family: Arial, sans-serif; margin:0; padding:0; display:flex; justify-content:center; align-items:center; height:100vh;}
-        .slip{width:280px; border:2px dashed #16a34a; padding:16px; text-align:center;}
-        .clinic{font-weight:700; font-size:16px;}
-        .since{font-size:11px; color:#555; margin-top:2px;}
-        .address{font-size:12px; margin-top:4px;}
-        hr{margin:10px 0; border:none; border-top:1px dashed #ccc;}
-        .row{display:flex; justify-content:space-between; font-size:13px; margin:4px 0;}
-        .token{font-size:34px; font-weight:800; margin:10px 0;}
-        .footer{font-size:11px; margin-top:8px; color:#555;}
-      </style>
-    </head>
-    <body>
-      <div class="slip">
-        <div class="clinic">COMMUNITY HEALTH CLINIC</div>
-        <div class="since">Since 2003</div>
-        <div class="address">Cheenimukku, Poonoor</div>
-        <hr>
-        <div class="row"><span>Name</span><span>${name}</span></div>
-        <div class="row"><span>Age</span><span>${age}</span></div>
-        <div class="row"><span>Sex</span><span>${sex}</span></div>
-        <hr>
-        <div class="token">${tokenNo}</div>
-        <div class="footer">${tokenDate}</div>
-        <div class="footer">Please wait for your turn</div>
-      </div>
-      <script>
-        window.onload = function() {
-          window.print();
-          window.close();
-        }
-      <\/script>
-    </body>
-    </html>
-  `);
+  doc.setFontSize(12);
+  doc.text(`Name: ${name}`, 20, 90);
+  doc.text(`Age: ${age}`, 20, 110);
+  doc.text(`Sex: ${sex}`, 20, 130);
 
-  printWindow.document.close();
+  doc.setLineWidth(0.5);
+  doc.line(20, 140, 280, 140); // another horizontal line
+
+  doc.setFontSize(24);
+  doc.text(`${tokenNo}`, 100, 170);
+
+  doc.setFontSize(10);
+  doc.text(tokenDate, 20, 200);
+  doc.text("Please wait for your turn", 20, 220);
+
+  // Trigger download
+  doc.save(`${name}_Token.pdf`);
 }
-
+          
 /* ============================
    AUTHENTICATION
    ============================ */
