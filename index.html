@@ -411,7 +411,6 @@ body.dark .dashboard{background:#1e1e1e;color:#f0f0f0}
   <div id="dashboard" class="dashboard">
     <h4>Tokens</h4>
     <ul id="tokenList"></ul>
-    <button id="masterBtn" onclick="clearAll()">Delete All Records</button>
   </div>
 </section>
 <script>
@@ -461,18 +460,25 @@ function saveTokens(tokens) {
 /* ============================
    TOKEN COUNT
    ============================ */
-function updateTokenCount() {
-  const count = getTokens().length;
-  const display = document.getElementById("tokenCountDisplay");
-  if (display) display.textContent = `Tokens issued: ${count}`; // unlimited
-}
+async function updateTokenCount() {
+  const tokenDateKey = todayKey;
+  const tokenRef = db.collection("tokens").doc(tokenDateKey);
+  const docSnap = await tokenRef.get();
 
-updateTokenCount();
+  let count = 0;
+  if (docSnap.exists) {
+    const tokens = docSnap.data().tokens || [];
+    count = tokens.length;
+  }
+
+  const display = document.getElementById("tokenCountDisplay");
+  if (display) display.textContent = `Tokens issued: ${count}`;
+}
 
 /* ============================
    TAKE TOKEN
    ============================ */
-function takeToken() {
+async function takeToken() {
   const name = document.getElementById("patientName").value.trim();
   const age = document.getElementById("age").value.trim();
   const sex = document.getElementById("sex").value;
@@ -483,16 +489,38 @@ function takeToken() {
     return;
   }
 
+  // 🔒 STEP 3 — BLOCK DUPLICATE TOKEN (same person, same day)
+  const today = new Date().toDateString();
+  const patientKey = `${name.toLowerCase()}|${age}|${sex}|${mobile}|${today}`;
+  const issuedPatients = JSON.parse(localStorage.getItem("issuedPatients")) || [];
+
+  if (issuedPatients.includes(patientKey)) {
+    alert("⚠️ Token already generated for this patient today.");
+    return;
+  }
+
   const now = new Date();
+  const tokenDateKey = todayKey; // Firestore document key for today
 
-  // Use the unified todayKey for token date
-  const tokenDateKey = todayKey;
+  // 🔹 STEP 2 — LOAD EXISTING TOKENS FROM FIRESTORE
+  const tokenRef = db.collection("tokens").doc(tokenDateKey);
+  const docSnap = await tokenRef.get();
+  let tokens = [];
+  if (docSnap.exists) tokens = docSnap.data().tokens || [];
 
-  // Load tokens
-  const tokenData = getTokens();
+  // Check duplicate in Firestore
+  const duplicate = tokens.find(
+    t => t.name === name && t.age === age && t.sex === sex && t.mobile === mobile
+  );
+  if (duplicate) {
+    alert("You have already taken a token today!");
+    return;
+  }
 
-  const tokenNumber = tokenData.length + 1;
+  // Assign token number
+  const tokenNumber = tokens.length + 1;
 
+  // Create new token
   const token = {
     token: tokenNumber,
     name,
@@ -503,17 +531,46 @@ function takeToken() {
     time: now.toLocaleTimeString()
   };
 
-  tokenData.push(token);
-  saveTokens(tokenData);
+  // Save to Firestore
+  tokens.push(token);
+  await tokenRef.set({ tokens });
 
   // Display token
   document.getElementById("tokenNo").textContent = "TOKEN " + tokenNumber;
   document.getElementById("tokenDate").textContent = "Date: " + tokenDateKey;
   document.getElementById("tokenResult").style.display = "block";
 
+  // Update token count after saving
   updateTokenCount();
+
+  // Mark patient as issued in localStorage to prevent duplicates in same browser
+  issuedPatients.push(patientKey);
+  localStorage.setItem("issuedPatients", JSON.stringify(issuedPatients));
 }
 
+/* =========================
+   STEP 2 — HELPER FUNCTIONS
+   (PASTE THIS ONCE)
+========================= */
+
+function getStoredPatients() {
+  return JSON.parse(localStorage.getItem("issuedTokens")) || [];
+}
+
+function savePatient(key) {
+  const list = getStoredPatients();
+  list.push(key);
+  localStorage.setItem("issuedTokens", JSON.stringify(list));
+}
+
+/* =========================
+   STEP 1 — PATIENT KEY
+========================= */
+
+function getPatientKey(name, age, sex) {
+  const today = new Date().toDateString();
+  return `${name.trim().toLowerCase()}|${age}|${sex}|${today}`;
+}
 /* ============================
    DOWNLOAD TOKEN
    ============================ */
@@ -522,7 +579,7 @@ async function downloadToken() {
 
   const doc = new jsPDF({
     unit: "px",
-    format: [300, 500] // token ticket size
+    format: [300, 300] // token ticket size
   });
 
   // --- Fetch token details ---
@@ -543,35 +600,35 @@ async function downloadToken() {
   doc.addImage(img, "PNG", 20, 20, 40, 40); // icon left
   doc.setFont("helvetica", "bold");
   doc.setFontSize(18);
-  doc.text("COMMUNITY HEALTH CLINIC", 70, 35); // aligned with icon vertically
+  doc.text("COMMUNITY HEALTH CLINIC", 70, 40); // aligned with icon vertically
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
-  doc.text("Cheenimukku, Poonoor", 70, 53);
+  doc.text("Cheenimukku, Poonoor", 70, 48);
 
   // --- Dashed line below header ---
   doc.setLineWidth(1);
   doc.setLineDash([4, 2], 0); // dashed
-  doc.line(20, 80, 280, 80);
+  doc.line(20, 70, 280, 70);
   doc.setLineDash([]); // reset dash
 
   // --- TOKEN DETAILS ---
   doc.setFontSize(12);
   doc.setFont("helvetica", "normal");
-  doc.text(`Name: ${name}`, 20, 115);
-  doc.text(`Age: ${age}`, 20, 135);
-  doc.text(`Sex: ${sex}`, 20, 155);
+  doc.text(`Name: ${name}`, 20, 100);
+  doc.text(`Age: ${age}`, 20, 110);
+  doc.text(`Sex: ${sex}`, 20, 130);
 
   doc.setLineWidth(0.5);
   doc.line(20, 165, 280, 165); // horizontal line
 
   doc.setFontSize(24);
   doc.setFont("helvetica", "bold");
-  doc.text(`${tokenNo}`, 120, 200); // centered
+  doc.text(`${tokenNo}`, 120, 150); // centered
 
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
-  doc.text(tokenDate, 20, 230);
-  doc.text("Please wait for your turn", 20, 250);
+  doc.text(tokenDate, 60, 130);
+  doc.text("Please wait for your turn", 20, 168);
 
   // --- DOWNLOAD PDF ---
   doc.save(`${name}_Token.pdf`);
@@ -606,7 +663,14 @@ function loadDashboard() {
 
   tokens.forEach(t => {
     const li = document.createElement("li");
-    li.textContent = `#${t.token} - ${t.name} (${t.age}, ${t.sex})`;
+    li.className = "token-item";
+
+    li.innerHTML = `
+      <div class="name">#${t.token} — ${t.name}</div>
+      <div>Age: ${t.age} | Sex: ${t.sex}</div>
+      <div class="mobile">📞 ${t.mobile || "N/A"}</div>
+    `;
+
     list.appendChild(li);
   });
 }
@@ -614,12 +678,27 @@ function loadDashboard() {
 /* ============================
    CLEAR ALL
    ============================ */
-function clearAll() {
-  if (!confirm("Delete all tokens for today?")) return;
-  localStorage.removeItem("tokens_" + todayKey);
-  loadDashboard();
-  updateTokenCount();
-}
+
+</script>
+  <!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+  // Your real Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyDFnt3AKoRtTZWJv8qENhp-jVaWccz3nFo",
+    authDomain: "clinic-token-7b65a.firebaseapp.com",
+    projectId: "clinic-token-7b65a",
+    storageBucket: "clinic-token-7b65a.appspot.com",
+    messagingSenderId: "1078001274022",
+    appId: "1:1078001274022:web:44d5816607e9e9dfe2f867",
+    measurementId: "G-ZWRDGCMMHT"
+  };
+
+  // Initialize Firebase
+  const app = firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore(); // Firestore reference
 </script>
 </body>
 </html>
