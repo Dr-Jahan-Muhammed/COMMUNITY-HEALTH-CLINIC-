@@ -510,6 +510,10 @@ function printToken() {
   const tokenNo = document.getElementById("tokenNo").innerText;
   const tokenDate = document.getElementById("tokenDate").innerText;
 
+  const name = document.getElementById("patientName").value;
+  const age = document.getElementById("age").value;
+  const sex = document.getElementById("sex").value;
+
   const printWindow = window.open("", "_blank", "width=400,height=600");
 
   printWindow.document.write(`
@@ -517,51 +521,89 @@ function printToken() {
     <head>
       <title>OP Token</title>
       <style>
-        body {
-          font-family: monospace;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 100vh;
-          margin: 0;
+        body{
+          font-family: Arial, sans-serif;
+          margin:0;
+          padding:0;
+          display:flex;
+          justify-content:center;
+          align-items:center;
+          height:100vh;
         }
-        .token-slip {
-          width: 280px;
-          border: 2px dashed #16a34a;
-          padding: 20px;
-          text-align: center;
+        .slip{
+          width:280px;
+          border:2px dashed #16a34a;
+          padding:16px;
+          text-align:center;
         }
-        h2 {
-          margin: 0 0 10px;
+        .clinic{
+          font-weight:700;
+          font-size:16px;
         }
-        .token-no {
-          font-size: 36px;
-          font-weight: bold;
-          margin: 10px 0;
+        .since{
+          font-size:11px;
+          color:#555;
+          margin-top:2px;
         }
-        .date {
-          font-size: 14px;
-          margin-top: 8px;
+        .address{
+          font-size:12px;
+          margin-top:4px;
+        }
+        hr{
+          margin:10px 0;
+          border:none;
+          border-top:1px dashed #ccc;
+        }
+        .row{
+          display:flex;
+          justify-content:space-between;
+          font-size:13px;
+          margin:4px 0;
+        }
+        .token{
+          font-size:34px;
+          font-weight:800;
+          margin:10px 0;
+        }
+        .footer{
+          font-size:11px;
+          margin-top:8px;
+          color:#555;
         }
       </style>
     </head>
     <body>
-      <div class="token-slip">
-        <h2>COMMUNITY HEALTH CLINIC</h2>
-        <div class="token-no">${tokenNo}</div>
-        <div class="date">${tokenDate}</div>
-        <div class="date">Please wait for your turn</div>
+      <div class="slip">
+        <div class="clinic">COMMUNITY HEALTH CLINIC</div>
+        <div class="since">Since 2003</div>
+        <div class="address">Cheenimukku, Poonoor</div>
+
+        <hr>
+
+        <div class="row"><span>Name</span><span>${name}</span></div>
+        <div class="row"><span>Age</span><span>${age}</span></div>
+        <div class="row"><span>Sex</span><span>${sex}</span></div>
+
+        <hr>
+
+        <div class="token">${tokenNo}</div>
+
+        <div class="footer">${tokenDate}</div>
+        <div class="footer">Please wait for your turn</div>
       </div>
 
       <script>
-        window.onload = function () {
+        window.onload = function(){
           window.print();
           window.close();
-        };
+        }
       <\/script>
     </body>
     </html>
   `);
+
+  printWindow.document.close();
+}
 
   printWindow.document.close();
 }
