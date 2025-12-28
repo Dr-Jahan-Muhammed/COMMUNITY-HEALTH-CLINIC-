@@ -227,6 +227,10 @@ body.dark .service-card{background:#222;color:#eee}
       General OP
     </div>
     <div class="service-card">
+      <img src="https://img.icons8.com/color/48/000000/pill.png">
+       Pharmacy
+    </div>
+    <div class="service-card">
       <img src="https://img.icons8.com/color/48/000000/lungs.png">
       Nebulisation
     </div>
@@ -305,12 +309,9 @@ themeBtn.addEventListener("click",()=>{
 function updateOPBadge() {
   const badge = document.getElementById("opBadge");
   const now = new Date();
-  const day = now.getDay(); // 0=Sun
   const hour = now.getHours();
-  let isOpen = false;
-  if(day===0 && hour>=9 && hour<20) isOpen=true;
-  else if(day>=1 && day<=6 && hour>=9 && hour<23) isOpen=true;
-  badge.textContent = isOpen ? "OPEN" : "CLOSED";
+const isOpen = (hour >= 9 && hour < 23); // SAME for all days
+   badge.textContent = isOpen ? "OPEN" : "CLOSED";
   badge.style.backgroundColor = isOpen ? "#16a34a" : "#dc2626"; // green/red
 }
 updateOPBadge();
@@ -399,6 +400,9 @@ body.dark .dashboard{background:#1e1e1e;color:#f0f0f0}
     
 <section class="token-container">
   <div class="section-title">Take Token (<span id="nextDate"></span>)</div>
+  <div id="tokenTimeRange" style="font-size:14px;color:#555;margin-top:4px;">
+  <!-- time range will appear here -->
+  </div>
   <div class="token-box">
     <input id="patientName" placeholder="Patient Name">
     <input id="age" type="number" placeholder="Age">
@@ -452,9 +456,24 @@ body.dark .dashboard{background:#1e1e1e;color:#f0f0f0}
 const AUTH_PIN = "1234"; // change later
 
 /* ============================
-   NEXT TOKEN DATE LOGIC
+   NEXT TOKEN DATE AND TIME LOGIC
    ============================ */
-function getNextWorkingDate() {
+function updateTokenTimeRange() {
+  const rangeDiv = document.getElementById("tokenTimeRange");
+  if (!rangeDiv) return "";
+
+  const tokenDate = getNextWorkingDate();
+  const day = tokenDate.getDay(); // 0=Sun, 6=Sat
+
+  let text = "";
+
+  if (day >= 1 && day <= 5) text = "9:00 AM – 5:30 PM";
+  else if (day === 6) text = "9:00 AM – 1:30 PM";
+
+  rangeDiv.textContent = `(${text})`; // parentheses only for page
+  return text; // plain text for PDF
+}
+  function getNextWorkingDate() {
   const now = new Date();
   let target = new Date(now);
 
@@ -479,6 +498,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Update token count on page load
   updateTokenCount();
+  updateTokenTimeRange();
 });
 
 /* ============================
@@ -625,7 +645,7 @@ async function downloadToken() {
   const name = document.getElementById("patientName").value;
   const age = document.getElementById("age").value;
   const sex = document.getElementById("sex").value;
-
+  const timeRange = updateTokenTimeRange();
   // --- Load header icon ---
   const iconUrl = "https://cdn-icons-png.flaticon.com/512/4006/4006511.png";
   const img = new Image();
@@ -665,6 +685,7 @@ async function downloadToken() {
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
   doc.text(tokenDate, 120, 100);
+  doc.text(`OP Time: ${timeRange}`, 120, 130); 
   doc.text("Please wait for your turn", 20, 150);
 
   // --- DOWNLOAD PDF ---
